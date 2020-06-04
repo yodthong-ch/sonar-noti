@@ -5,9 +5,13 @@ import {postQueue} from './queue'
 import postLogFailed from './log'
 import LogDeviceFailedRepository from '../repositories/LogDeviceFailed'
 import { postRegisterToken } from './register'
+import { clusterName } from '../config/app'
+import { getHealthCheck } from './health'
 export default (app:Express) => {
 
     app.post('/register', postRegisterToken(() => DeviceToken.make()))
     app.post('/queue', postQueue(() => DeviceToken.make(), () => LogHeader.make() ))
     app.post('/log', postLogFailed(() => LogDeviceFailedRepository.make()))
+
+    app.get('/health', getHealthCheck(clusterName))
 }

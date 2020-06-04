@@ -1,48 +1,63 @@
-enum DeviceType {
-    WEB = 1,
-    IOS = 2,
-    ANDROID = 3,
+export enum DeviceType {
+    IOS = "ios",
+    ANDROID = "android",
+    FIREBASE = "firebase",
+    FIREBASE_WEB = "firebase:web",
+    FIREBASE_IOS = "firebase:ios",
+    FIREBASE_ANDROID = "firebase:android",
 }
 
-type appIdSet = {
+type AppIdSet = {
     [appid: string]: {
         name: string,
-        support: DeviceType,
+        support: DeviceType[],
     }
 }
 
-export const convertDeviceType2Enum = (txt: string) => {
+export const convertDeviceType2Enum = (txt: string):DeviceType => {
     switch (txt.toUpperCase())
     {
-        case "WEB":
-            return DeviceType.WEB
-        case "IOS":
+        case "ios":
             return DeviceType.IOS
-        case "ANDROID":
+        case "android":
             return DeviceType.ANDROID
+        case "firebase:ios":
+            return DeviceType.FIREBASE_IOS
+        case "firebase:android":
+            return DeviceType.FIREBASE_ANDROID
+        case "firebase:web":
+            return DeviceType.FIREBASE_WEB
+        default:
+            throw new TypeError(`${txt} not match`)
     }
 }
 
-export const convertDeviceType2Text = (dt:DeviceType) => {
+export const convertDeviceType2Text = (dt:DeviceType):string => {
     switch (dt)
     {
-        case DeviceType.WEB:
-            return "WEB"
         case DeviceType.IOS:
-            return "IOS"
+            return "ios"
         case DeviceType.ANDROID:
-            return "ANDROID"
+            return "android"
+        case DeviceType.FIREBASE_IOS:
+            return "firebase:ios"
+        case DeviceType.FIREBASE_ANDROID:
+            return "firebase:android"
+        case DeviceType.FIREBASE_WEB:
+            return "firebase:web"
+        default:
+            return ''
     }
 } 
 
-const appIds:appIdSet = {
+const appIds:AppIdSet = {
     "com.dekd.school": {
         name: "Dek-D School",
-        support: DeviceType.WEB,
+        support: [DeviceType.FIREBASE_WEB],
     },
     "com.dekd.apps.admission": {
         name: "TCAS Dek-D",
-        support: DeviceType.ANDROID | DeviceType.IOS,
+        support: [DeviceType.FIREBASE_ANDROID, DeviceType.FIREBASE_IOS],
     }
 }
 

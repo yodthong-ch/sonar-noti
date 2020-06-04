@@ -9,14 +9,15 @@ export const postLogFailed = (LogDeviceFailedDI: ()=> LogDeviceFailedInterface) 
         try
         {
             const id = await LogDeviceFailedDI()
-                .setAppId(data.appId)
-                .setHeaderId(data.headerId)
-                .setProgram(data.program)
-                .setChunk(data.chunk)
-                .setDeviceToken(data.deviceToken)
-                .setUserId(data.userId)
-                .setError(data.error)
-                .save()
+                .save({
+                    headerId: data.headerId,
+                    appId: data.appId,
+                    program: data.program,
+                    chunk: data.chunk,
+                    deviceToken: data.deviceToken,
+                    userId: data.userId || 0,
+                    error: data.error,
+                })
 
             res.send({ id })
         }

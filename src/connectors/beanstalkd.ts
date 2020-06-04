@@ -2,36 +2,61 @@ import JackdClient from 'jackd'
 import { get, isEmpty } from 'lodash'
 import { aliases, servers, tubes } from '../config/beanstalk'
 import { applicationEnvironment } from '../config/app'
+import QueueInterface, { PutOption } from './QueueInterface'
 
-const connections:{[server: string]: JackdClient} = {}
+const connections:{[tube: string]: BeanstalkQueue} = {}
 
-export const connect = async (tube = 'default') => {
-  const tubeSelect = tubes[tube]
-  if (!tubeSelect) {
-    throw new Error(`Beanstalkd tube name '${tube}' doesn't exist`)
-  }
+const connect = async (server = 'default') => {
 
-  const targetServer = aliases[tubeSelect.server || 'default']
+  const targetServer = aliases[server || 'default']
   const options = servers[applicationEnvironment][targetServer]
   if (!options)
   {
     throw new Error(`Beanstalkd server name '${targetServer}' doesn't exist`)
   }
 
-  let connection = connections[tubeSelect.name]
-  if (!connection)
-  {
-    connection = new JackdClient()
+  const connection = new JackdClient()
     
-    await connection.connect({
-      host: options.host,
-      port: options.port,
-    })
-    await connection.use(tubeSelect.name)
-    connections[tubeSelect.name] = connection
-  }
+  await connection.connect({
+    host: options.host,
+    port: options.port,
+  })
+
+  // await connection.use(tubeSelect.name)
 
   return connection
 }
 
-export default connect
+class BeanstalkQueue implements QueueInterface {
+  private bt: JackdClient
+  private tubeName: string
+
+  constructor(server: JackdClient, tubeName: string)
+  {
+    this.bt = server
+    this.tubeName = tubeName
+  }
+
+  async put(payload: string, {delay}:PutOption = {}): Promise<void> {
+    await this.bt.use(this.tubeName)
+    await this.bt.put(payload, { delay })
+  }
+}
+
+export const create = async(tubeName: string) => {
+  const tubeSelect = tubes[tubeName]
+  if (!tubeSelect)
+  {
+    throw new Error(`${tubeName} not configurated`)
+  }
+
+  let conn = connections[tubeName]
+  if (!conn)
+  {
+    const conenctor = await connect(tubeSelect.server)
+    conn = new BeanstalkQueue(conenctor, tubeSelect.name)
+  }
+  return conn
+}
+
+export default create

@@ -19,7 +19,7 @@ export type MongoDBGroupConfig = {
 
 export type InputQueueTarget = {
     appId: string,
-    userId?: number[],
+    userIds?: number[],
     deviceType?: string,
 }
 
@@ -55,4 +55,9 @@ export type InputRegisterToken = {
     deviceType: string,
     version: string,
     userId?: number,
+}
+
+export type InputPrivateParams = {
+  params: any,
+  time: number,
 }

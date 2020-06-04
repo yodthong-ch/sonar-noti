@@ -1,5 +1,6 @@
 import * as Express from 'express'
 import {AES} from '../helpers/crypt'
+import { InputPrivateParams } from '../items/type'
 export type DecodeMiddleware = (req: Express.Request, res: Express.Response, next: Express.NextFunction) => void
 export default (key: string):DecodeMiddleware => (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
     if (req.method !== 'POST')
@@ -22,7 +23,8 @@ export default (key: string):DecodeMiddleware => (req: Express.Request, res: Exp
 
     try
     {
-        req.body =  AES.decrypt(raw, key)
+        const decData = <InputPrivateParams>JSON.parse(AES.decrypt(raw, key))
+        req.body =  decData.params
         next()
     }
     catch (err) {

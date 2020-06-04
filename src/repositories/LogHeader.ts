@@ -20,7 +20,7 @@ class LogHeader implements LogHeaderInterface {
             chunks: [],
             target: {
                 appId: item.target.appId,
-                userId: item.target.userId,
+                userIds: item.target.userIds,
                 deviceMatch: item.target.deviceMatch,
             },
             status: 'P',
@@ -51,8 +51,6 @@ class LogHeader implements LogHeaderInterface {
         const result = await LogHeaderModel.findOne({_id: this._id})
 
         if (!result) return null
-
-        console.log(result)
 
         return {
             _id: result._id,

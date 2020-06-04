@@ -22,7 +22,7 @@ const schema = new Mongoose.Schema(
     }],
     target: {
         appId: { require: true, type: Mongoose.Schema.Types.String },
-        userId: [Mongoose.Schema.Types.Number],
+        userIds: [Mongoose.Schema.Types.Number],
         deviceMatch: Mongoose.Schema.Types.Number,
     },
     status: Mongoose.Schema.Types.String,

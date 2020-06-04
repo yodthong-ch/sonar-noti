@@ -1,15 +1,7 @@
-import LogDeviceFailed from "../../items/LogDeviceFailed";
+import InputLogDeviceFailed from "../../items/InputLogDeviceFailed";
 
 interface LogDeviceFailedInterface {
-    setHeaderId(id: string):LogDeviceFailedInterface
-    setProgram(program: string):LogDeviceFailedInterface
-    setAppId(appid: string):LogDeviceFailedInterface
-    setChunk(no: number):LogDeviceFailedInterface
-    setUserId(userId: number):LogDeviceFailedInterface
-    setDeviceToken(token: string):LogDeviceFailedInterface
-    setError(error: string):LogDeviceFailedInterface
-    
-    save():Promise<string>
+    save(input:InputLogDeviceFailed):Promise<string>
 }
 
 export default LogDeviceFailedInterface

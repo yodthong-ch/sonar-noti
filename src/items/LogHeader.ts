@@ -8,7 +8,7 @@ type LogHeader = {
     message: {[x:string]: any},
     target: {
         appId: string,
-        userId?: number[],
+        userIds?: number[],
         deviceMatch: number,
     },
     status: string,

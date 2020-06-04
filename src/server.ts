@@ -13,8 +13,6 @@ privateApp.use(express.text())
 PrivateAPI(privateApp)
 PublicAPI(app)
 
-app.get('/health', (_, res) => res.send('OK'))
-
 app.listen(publicPort, () => {
     console.log(`Running Public API :${publicPort}`)
 })

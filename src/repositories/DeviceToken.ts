@@ -1,6 +1,7 @@
 import DeviceTokenInterface from "./interfaces/DeviceTokenInterface"
 import DeviceTokenModel from '../models/mongo/service_user/devices'
 import Token from "../items/Token"
+import appIds, { DeviceType, convertDeviceType2Text } from '../config/appid'
 
 type QueryParams = {[option: string]: any}
 
@@ -40,23 +41,42 @@ class DeviceToken implements DeviceTokenInterface {
         return this
     }
 
-    async register(appVersion: string, deviceType: string, deviceToken: string, userId?: number):Promise<boolean> {
+    async register(appVersion: string, deviceType: DeviceType, deviceToken: string, userId?: number):Promise<boolean> {
         const {appId} = this.filter
+
+        if (!appId)
+        {
+            throw new Error(`appId require`)
+        }
+
+        if (!appIds[appId])
+        {
+            throw new Error(`appId invalid`)
+        }
+
+        if ( appIds[appId].support.indexOf(deviceType) < 0 )
+        {
+            throw new Error(`deviceType not support in appId`)
+        }
+
+        const deviceTypeTxt = convertDeviceType2Text(deviceType)
+
         const data = {
             $setOnInsert: {
-                appId,
-                deviceType,
-                deviceToken,
                 createAt: Date.now(),
             },
-            appVersion,
-            userId: userId || 0,
-            updateAt: Date.now(),
-            activate: true,
+            $set: {
+                deviceType: deviceTypeTxt,
+                appVersion,
+                userId: userId || 0,
+                updateAt: Date.now(),
+                activate: true,
+            },
         }
 
         const row = await DeviceTokenModel.findOneAndUpdate({
             appId,
+            deviceType: deviceTypeTxt,
             deviceToken,
         }, data, { new: true, upsert: true }).exec()
         return !!row

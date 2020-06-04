@@ -1,7 +1,5 @@
-type LogDeviceFailed = {
-    _id?: string,
+type InputLogDeviceFailed = {
     headerId: string,
-    createAt: Date,
     program: string,
     appId: string,
     chunk: number,
@@ -10,4 +8,4 @@ type LogDeviceFailed = {
     error?: string,
 }
 
-export default LogDeviceFailed
+export default InputLogDeviceFailed

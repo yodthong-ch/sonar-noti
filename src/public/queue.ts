@@ -1,8 +1,9 @@
 import {Request, Response} from 'express'
 import DeviceTokenInterface from '../repositories/interfaces/DeviceTokenInterface'
 import {InputQueue, ChunkPacket} from '../items/type'
-import { ClusterRequest } from '../services/Request'
+import { clusterRequest } from '../services/Request'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
+import appIds from '../config/appid'
 
 const LIMIT_TOKEN = 5000,
         LIMIT_PRIVATE_CONN = 10
@@ -12,10 +13,16 @@ const valid = (input: InputQueue) => {
         throw new Error(`input require`)
     if (!input.program)
         throw new Error(`program require`)
+        
     if (!input.message)
         throw new Error(`message require`)
+    else if (Object.entries(input.message).length === 0)
+        throw new Error(`message is empty`)
+
     if (!input.target.appId)
         throw new Error(`appid require`)
+    else if (!appIds[input.target.appId])
+        throw new Error(`${input.target.appId} invalid`)
 }
 
 export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface) =>
@@ -24,14 +31,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
 
         try {
             valid(data)
-        }
-        catch (err)
-        {
-            res.status(400).send({error: err.message})
-            return;
-        }
 
-        try {
             const token = DeviceTokenDI()
             token.setAppId(data.target.appId)
             
@@ -40,9 +40,9 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                 token.setDeviceType(data.target.deviceType)
             }
 
-            if (data.target.userId)
+            if (data.target.userIds)
             {
-                token.setUserIds(data.target.userId)
+                token.setUserIds(data.target.userIds)
             }
 
             const total = await token.count()
@@ -57,7 +57,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                 chunks: [],
                 target: {
                     appId: data.target.appId,
-                    userId: data.target.userId,
+                    userIds: data.target.userIds,
                     deviceMatch: total,
                 },
                 status: "P",
@@ -69,16 +69,16 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                 id: hdrId,
             })
 
-            let chunks = []
+            let chunkOffsets = []
             for (let i = 0; i < totalPage; i++)
             {
-                chunks.push(i * LIMIT_TOKEN)
+                chunkOffsets.push(i * LIMIT_TOKEN)
             }
 
             let ccnt = 0
             while (ccnt < totalPage)
             {
-                const chunked = chunks.slice(ccnt, ccnt + LIMIT_PRIVATE_CONN)
+                const chunked = chunkOffsets.slice(ccnt, ccnt + LIMIT_PRIVATE_CONN)
 
                 await Promise.all(chunked.map( async c => {
 
@@ -90,7 +90,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                     }
                     try
                     {
-                        await ClusterRequest('chunk', newChunk)
+                        await clusterRequest('chunk', newChunk)
                         hdr.chunkState(c, true)
                         return true
                     }
