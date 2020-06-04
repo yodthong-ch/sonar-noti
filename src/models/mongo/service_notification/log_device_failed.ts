@@ -1,7 +1,7 @@
 import { Mongoose, NOTIFICATION_SERVICE, connect } from '../../../connectors/mongodb'
 
 const service = NOTIFICATION_SERVICE
-const collection = 'log_device'
+const collection = 'log_device_failed'
 
 const schemaOptions = {
   collection,
@@ -11,13 +11,12 @@ const schemaOptions = {
 const schema = new Mongoose.Schema(
   {
     headerId: { require: true, type: Mongoose.Schema.Types.ObjectId },
-    chunkNo: { require: true, type: Mongoose.Schema.Types.Number },
+    chunk: { require: true, type: Mongoose.Schema.Types.Number },
     program: { require: true, type: Mongoose.Schema.Types.String },
     appId: { require: true, type: Mongoose.Schema.Types.String },
-    deviceId: { require: true, type: Mongoose.Schema.Types.ObjectId },
+    deviceToken: { require: true, type: Mongoose.Schema.Types.String },
     createAt: { require: true, type: Mongoose.Schema.Types.Date },
-    doneAt: Mongoose.Schema.Types.Date,
-    status: Mongoose.Schema.Types.String,
+    error: Mongoose.Schema.Types.String,
   },
   schemaOptions
 )

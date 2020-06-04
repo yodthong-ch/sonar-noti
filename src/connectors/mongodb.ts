@@ -2,7 +2,7 @@ import config from '../config/mongodb'
 import bluebird from 'bluebird'
 import _ from 'lodash'
 import mongoose from 'mongoose'
-import { ApplicationEnvironment } from '../config/app'
+import { applicationEnvironment } from '../config/app'
 
 export const connections:{[service: string]: mongoose.Connection} = {}
 
@@ -19,7 +19,7 @@ export const create = (service:string) => {
   let connection = connections[service]
 
   if (!connection) {
-    const server = config[ApplicationEnvironment][service]
+    const server = config[applicationEnvironment][service]
 
     connection = mongoose.createConnection(server, { poolSize: 30 })
 

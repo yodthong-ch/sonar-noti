@@ -1,15 +1,6 @@
-type ServerConfig = {
-  host: string,
-  port: number,
-}
+import {BeanstalkServerStaging} from '../items/type'
 
-type ServerStaging = {
-  [staging:string]: {
-    [name:string]: ServerConfig,
-  }
-}
-
-export const servers:ServerStaging = {
+export const servers:BeanstalkServerStaging = {
     production: {
       default: {
         host: '192.168.100.230',

@@ -4,7 +4,7 @@ type LogHeader = {
     doneAt?: Date,
     program: string,
     tags?: string[],
-    chunks: {_id: false, no: number, status: boolean}[],
+    chunks: {no: number, status: boolean}[],
     message: {[x:string]: any},
     target: {
         appId: string,

@@ -28,9 +28,12 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                 if (item.deviceType === 'firebase' || item.deviceType === 'firebase:android' || item.deviceType === 'firebase:ios' || item.deviceType === 'firebase:web')
                 {
                     const bt = await connect('FIREBASE_API')
-
                     bt.put(encodeURIComponent(JSON.stringify({
                         appId: data.target.appId,
+                        program: hdr.program,
+                        headerId: hdr._id,
+                        chunk: data.offset,
+                        userId: item.userId || 0,
                         token: item.token,
                         payload: hdr.message,
                     })))

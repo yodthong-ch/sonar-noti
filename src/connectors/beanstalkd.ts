@@ -1,7 +1,7 @@
 import JackdClient from 'jackd'
 import { get, isEmpty } from 'lodash'
 import { aliases, servers, tubes } from '../config/beanstalk'
-import { ApplicationEnvironment } from '../config/app'
+import { applicationEnvironment } from '../config/app'
 
 const connections:{[server: string]: JackdClient} = {}
 
@@ -12,7 +12,7 @@ export const connect = async (tube = 'default') => {
   }
 
   const targetServer = aliases[tubeSelect.server || 'default']
-  const options = servers[ApplicationEnvironment][targetServer]
+  const options = servers[applicationEnvironment][targetServer]
   if (!options)
   {
     throw new Error(`Beanstalkd server name '${targetServer}' doesn't exist`)

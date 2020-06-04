@@ -52,6 +52,8 @@ class LogHeader implements LogHeaderInterface {
 
         if (!result) return null
 
+        console.log(result)
+
         return {
             _id: result._id,
             createAt: result.get('createAt'),
@@ -83,7 +85,7 @@ class LogHeader implements LogHeaderInterface {
             _id: this._id
         }, {
             $set: {
-                status: 'D',
+                status: 'S',
                 doneAt: new Date(),
             }
         })

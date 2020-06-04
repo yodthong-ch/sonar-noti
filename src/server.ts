@@ -2,19 +2,23 @@ import express from 'express'
 import PrivateAPI from './private'
 import PublicAPI from './public'
 
-import {PublicPort, PrivatePort} from './config/app'
+import {publicPort, privatePort} from './config/app'
 
 const app = express(),
     privateApp = express()
+
 app.use(express.json())
 privateApp.use(express.text())
+
 PrivateAPI(privateApp)
 PublicAPI(app)
 
-app.listen(PublicPort, () => {
-    console.log(`Running Public API :${PublicPort}`)
+app.get('/health', (_, res) => res.send('OK'))
+
+app.listen(publicPort, () => {
+    console.log(`Running Public API :${publicPort}`)
 })
 
-privateApp.listen(PrivatePort, () => {
-    console.log(`Running Private API :${PrivatePort}`)
+privateApp.listen(privatePort, () => {
+    console.log(`Running Private API :${privatePort}`)
 })

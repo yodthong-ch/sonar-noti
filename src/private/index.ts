@@ -1,16 +1,16 @@
 import {Express} from 'express'
-import {Key} from '../config/app'
+import {key} from '../config/app'
 import DecodeMiddleware from '../middlewares/decode'
 import PostChunk from './chunk'
 import DeviceToken from '../repositories/DeviceToken'
 import LogHeader from '../repositories/LogHeader'
 
 export default (app:Express) => {
-    if (!Key) {
+    if (!key) {
         throw new Error(`private api: missing key`)
     }
     
-    const decmiddle = DecodeMiddleware(Key)
+    const decmiddle = DecodeMiddleware(key)
 
     app.post('/chunk', decmiddle, PostChunk(()=>DeviceToken.make(), ()=> LogHeader.make()))
 

@@ -3,6 +3,7 @@ type Token = {
     token: string,
     appId: string,
     deviceType: string,
+    userId?: number,
     activate: boolean,
 }
 

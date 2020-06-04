@@ -1,10 +1,4 @@
-type MongoDBConfig = string
-
-type MongoDBGroupConfig = {
-  [staging: string]: {
-    [db:string]: MongoDBConfig
-  }
-}
+import {MongoDBGroupConfig} from '../items/type'
 
 const config:MongoDBGroupConfig = {
   production: {

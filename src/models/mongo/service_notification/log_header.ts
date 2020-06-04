@@ -16,8 +16,9 @@ const schema = new Mongoose.Schema(
     tags: [Mongoose.Schema.Types.String],
     message: Mongoose.Schema.Types.Mixed,
     chunks: [{
-        no: {require: true, type: Mongoose.Schema.Types.Number},
-        status: {require: true, type: Mongoose.Schema.Types.Boolean},
+      _id: false,
+      no: {require: true, type: Mongoose.Schema.Types.Number},
+      status: {require: true, type: Mongoose.Schema.Types.Boolean},
     }],
     target: {
         appId: { require: true, type: Mongoose.Schema.Types.String },

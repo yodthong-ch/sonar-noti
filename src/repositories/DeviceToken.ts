@@ -111,6 +111,7 @@ class DeviceToken implements DeviceTokenInterface {
                 token: item.get('deviceToken'),
                 appId: item.get('appId'),
                 deviceType: item.get('deviceType'),
+                userId: item.get('userId'),
                 activate: item.get('activate'),
             }
         })
@@ -136,6 +137,7 @@ class DeviceToken implements DeviceTokenInterface {
                 token: item.get('deviceToken'),
                 appId: item.get('appId'),
                 deviceType: item.get('deviceType'),
+                userId: item.get('userId'),
                 activate: item.get('activate'),
             }
         })

@@ -1,6 +1,5 @@
 import {Request, Response} from 'express'
 import DeviceTokenInterface from '../repositories/interfaces/DeviceTokenInterface'
-import {connect} from '../connectors/beanstalkd'
 import {InputQueue, ChunkPacket} from '../items/type'
 import { ClusterRequest } from '../services/Request'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
@@ -8,23 +7,44 @@ import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 const LIMIT_TOKEN = 5000,
         LIMIT_PRIVATE_CONN = 10
 
+const valid = (input: InputQueue) => {
+    if (!input)
+        throw new Error(`input require`)
+    if (!input.program)
+        throw new Error(`program require`)
+    if (!input.message)
+        throw new Error(`message require`)
+    if (!input.target.appId)
+        throw new Error(`appid require`)
+}
+
 export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface) =>
     async (req: Request, res: Response) => {
         const data = req.body as InputQueue
 
-        const token = DeviceTokenDI()
-        token.setAppId(data.target.appId)
-        if (data.target.deviceType)
-        {
-            token.setDeviceType(data.target.deviceType)
+        try {
+            valid(data)
         }
-
-        if (data.target.userId)
+        catch (err)
         {
-            token.setUserIds(data.target.userId)
+            res.status(400).send({error: err.message})
+            return;
         }
 
         try {
+            const token = DeviceTokenDI()
+            token.setAppId(data.target.appId)
+            
+            if (data.target.deviceType)
+            {
+                token.setDeviceType(data.target.deviceType)
+            }
+
+            if (data.target.userId)
+            {
+                token.setUserIds(data.target.userId)
+            }
+
             const total = await token.count()
             const totalPage = Math.ceil(total / LIMIT_TOKEN)
 
@@ -32,7 +52,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
 
             const hdrId = await hdr.store({
                 createAt: new Date(),
-                program: 'notification',
+                program: data.program,
                 message: data.message,
                 chunks: [],
                 target: {
@@ -86,11 +106,9 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
 
             hdr.flagDone()
         }
-        catch (_err)
+        catch (err)
         {
-            const err = _err as Error
-
-            res.status(500).send(err.message)
+            res.status(500).send({error: err.message})
         }
         
     }
