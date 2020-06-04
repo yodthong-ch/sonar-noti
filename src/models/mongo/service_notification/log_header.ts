@@ -11,7 +11,7 @@ const schemaOptions = {
 const schema = new Mongoose.Schema(
   {
     createAt: { require: true, type: Mongoose.Schema.Types.Date},
-    doneAt: Date,
+    doneAt: Mongoose.Schema.Types.Date,
     program: { require: true, type: Mongoose.Schema.Types.String },
     tags: [Mongoose.Schema.Types.String],
     message: Mongoose.Schema.Types.Mixed,
