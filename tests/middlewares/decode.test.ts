@@ -6,10 +6,12 @@ import {mockRequest, mockResponse} from 'mock-req-res'
 
 const key = 'aabbccddeeff' + Date.now()
 const plantext = 'test123' + Date.now()
+const time = Date.now()
+const mesg = { params: plantext, time }
 
 describe('Decode middleware', () => {
     let middleware:DecodeMiddleware
-    const encdata = AES.encrypt(plantext, key)
+    const encdata = AES.encrypt(JSON.stringify(mesg), key)
 
     beforeEach(()=>{
         middleware = Middleware(key)

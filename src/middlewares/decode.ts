@@ -28,7 +28,6 @@ export default (key: string):DecodeMiddleware => (req: Express.Request, res: Exp
         next()
     }
     catch (err) {
-        console.log(err)
         res.status(500).send({
             invalidCipher: true,
             err
