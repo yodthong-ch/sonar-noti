@@ -6,10 +6,11 @@
   "license": "Proprietary",
   "private": true,
   "scripts": {
-    "dev": "PRIVATE_KEY=test123456 APP_ENV=development ts-node src/server.ts",
-    "watch": "PRIVATE_KEY=test123456 APP_ENV=development nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "dev": "PRIVATE_KEY=test123456 APP_ENV=development nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
     "check": "tsc --noEmit",
+    "prebuild": "yarn test",
     "build": "babel src --out-dir build --extensions \".ts\" --source-maps inline",
+    "start": "node build/server.js",
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
   },
