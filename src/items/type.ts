@@ -23,10 +23,10 @@ export type InputQueueTarget = {
     deviceType?: string,
 }
 
-export type InputQueueMessage = {[x:string]: any}
+export type InputQueuePayload = {[x:string]: any}
 
 export type InputQueue = {
-    message: InputQueueMessage,
+    payload: InputQueuePayload,
     program: string,
     target: InputQueueTarget,
     tags?: string[],

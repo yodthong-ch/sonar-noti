@@ -5,7 +5,7 @@ type LogHeader = {
     program: string,
     tags?: string[],
     chunks: {no: number, status: boolean}[],
-    message: {[x:string]: any},
+    payload: {[x:string]: any},
     target: {
         appId: string,
         userIds?: number[],

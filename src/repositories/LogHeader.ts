@@ -16,7 +16,7 @@ class LogHeader implements LogHeaderInterface {
             createAt: new Date(),
             program: item.program,
             tags: item.tags,
-            message: item.message,
+            payload: item.payload,
             chunks: [],
             target: {
                 appId: item.target.appId,
@@ -56,7 +56,7 @@ class LogHeader implements LogHeaderInterface {
             _id: result._id,
             createAt: result.get('createAt'),
             program: result.get('program'),
-            message: result.get('message'),
+            payload: result.get('payload'),
             chunks: result.get('chunks'),
             target: result.get('target'),
             status: result.get('status'),

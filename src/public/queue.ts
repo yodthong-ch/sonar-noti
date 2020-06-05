@@ -14,10 +14,10 @@ const valid = (input: InputQueue) => {
     if (!input.program)
         throw new Error(`program require`)
         
-    if (!input.message)
-        throw new Error(`message require`)
-    else if (Object.entries(input.message).length === 0)
-        throw new Error(`message is empty`)
+    if (!input.payload)
+        throw new Error(`payload require`)
+    else if (Object.entries(input.payload).length === 0)
+        throw new Error(`payload is empty`)
 
     if (!input.target.appId)
         throw new Error(`appid require`)
@@ -53,7 +53,8 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
             const hdrId = await hdr.store({
                 createAt: new Date(),
                 program: data.program,
-                message: data.message,
+                payload: data.payload,
+                tags: data.tags,
                 chunks: [],
                 target: {
                     appId: data.target.appId,

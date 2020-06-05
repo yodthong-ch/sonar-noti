@@ -15,7 +15,7 @@ type AppIdSet = {
 }
 
 export const convertDeviceType2Enum = (txt: string):DeviceType => {
-    switch (txt.toUpperCase())
+    switch (txt.toLowerCase())
     {
         case "ios":
             return DeviceType.IOS

@@ -14,7 +14,7 @@ const schema = new Mongoose.Schema(
     doneAt: Mongoose.Schema.Types.Date,
     program: { require: true, type: Mongoose.Schema.Types.String },
     tags: [Mongoose.Schema.Types.String],
-    message: Mongoose.Schema.Types.Mixed,
+    payload: Mongoose.Schema.Types.Mixed,
     chunks: [{
       _id: false,
       no: {require: true, type: Mongoose.Schema.Types.Number},

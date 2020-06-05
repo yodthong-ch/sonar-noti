@@ -37,7 +37,7 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                         chunk: data.offset,
                         userId: item.userId || 0,
                         token: item.token,
-                        payload: hdr.message,
+                        payload: hdr.payload,
                     })))
                 }
             })

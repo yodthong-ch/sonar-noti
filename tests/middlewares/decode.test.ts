@@ -61,4 +61,17 @@ describe('Decode middleware', () => {
         expect(nextSpy.calledOnce).to.be.false;
         expect(mRes.status.calledWith(500)).equal(true)
     })
+
+    it('empty body', () => {
+        const nextSpy = sinon.spy()
+
+        const mReq = mockRequest({method: "POST", body: null}),
+            mRes = mockResponse()
+
+        // mock middleware
+        middleware(mReq, mRes, nextSpy)
+        
+        expect(nextSpy.calledOnce).to.be.false;
+        expect(mRes.status.calledWith(400)).equal(true)
+    })
 })
