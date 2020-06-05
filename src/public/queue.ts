@@ -1,7 +1,7 @@
 import {Request, Response} from 'express'
 import DeviceTokenInterface from '../repositories/interfaces/DeviceTokenInterface'
 import {InputQueue, ChunkPacket} from '../items/type'
-import { clusterRequest } from '../services/Request'
+import { ClusterRequestFunc } from '../services/Request'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 import appIds from '../config/appid'
 
@@ -25,9 +25,10 @@ const valid = (input: InputQueue) => {
         throw new Error(`${input.target.appId} invalid`)
 }
 
-export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface) =>
+export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface, ClusterRequestDI: ()=>ClusterRequestFunc) =>
     async (req: Request, res: Response) => {
         const data = req.body as InputQueue
+        const clusterRequest = ClusterRequestDI()
 
         try {
             valid(data)

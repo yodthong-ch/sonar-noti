@@ -1,10 +1,11 @@
 import {Request, Response} from 'express'
-import { clusterRequest } from '../services/Request'
+import { ClusterRequestFunc } from '../services/Request'
 import os from 'os'
 import { LookupIPs } from '../helpers/dns'
 
-export const getHealthCheck = (clusterName: string) =>
+export const getHealthCheck = (clusterName: string, ClusterRequestDI:()=>ClusterRequestFunc) =>
     async (req: Request, res: Response) => {
+        const clusterRequest = ClusterRequestDI()
         try
         {
             const clusterIps = await LookupIPs(clusterName)

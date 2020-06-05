@@ -1,52 +1,7 @@
 import { expect } from 'chai'
-import sinon from 'sinon'
 import {mockRequest, mockResponse} from 'mock-req-res'
 import { postRegisterToken } from '../../src/public/register'
-import DeviceTokenInterface from '../../src/repositories/interfaces/DeviceTokenInterface'
-import {Request, Response} from 'express'
-
-import {DeviceType} from "../../src/config/appid"
-import TokenItem from "../../src/items/Token"
-
-class MockDeviceToken implements DeviceTokenInterface
-{
-    public appId: string = ''
-    public data:{[x: string]: any} = {}
-    async register(appVersion: string, deviceType: DeviceType, deviceToken: string, userId?: number | undefined): Promise<boolean> {
-        this.data = {
-            appVersion,
-            deviceType,
-            deviceToken,
-            userId,
-        }
-
-        return true
-    }
-
-    count(): Promise<number> {
-        throw new Error("Method not implemented.")
-    }
-    execute(): Promise<TokenItem[]> {
-        throw new Error("Method not implemented.")
-    }
-    chunk(offset: number, limit: number): Promise<TokenItem[]> {
-        throw new Error("Method not implemented.")
-    }
-    setAppId(value: string): DeviceTokenInterface {
-        this.appId = value
-        return this
-    }
-    setDeviceType(value: string): DeviceTokenInterface {
-        throw new Error("Method not implemented.")
-    }
-    setUserIds(userIds: number[]): DeviceTokenInterface {
-        throw new Error("Method not implemented.")
-    }
-    clearUserIds(): DeviceTokenInterface {
-        throw new Error("Method not implemented.")
-    }
-    
-}
+import { MockDeviceToken } from '../mock/DeviceToken'
 
 describe('endpoint - public register', () => {
     it('register token', async () => {
