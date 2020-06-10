@@ -11,7 +11,7 @@ class LogHeader implements LogHeaderInterface {
         return new LogHeader()
     }
 
-    async store(item: LogHeaderItem): Promise<string> {
+    async save(item: LogHeaderItem): Promise<string> {
         const createHdr = await LogHeaderModel.create({
             createAt: new Date(),
             program: item.program,
@@ -34,12 +34,12 @@ class LogHeader implements LogHeaderInterface {
         if (!this._id) throw new Error(`no set id`)
     }
 
-    setHeaderId(id: string): LogHeaderInterface {
+    setId(id: string): LogHeaderInterface {
         this._id = id
         return this
     }
 
-    getHeaderId(): string {
+    getId(): string {
         this.valid()
 
         return this._id!

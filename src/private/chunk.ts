@@ -11,7 +11,7 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
         const data = <ChunkPacket>req.body
         try
         {
-            const hdr = await LogHeaderDI().setHeaderId(data.headerId).getHeader()
+            const hdr = await LogHeaderDI().setId(data.headerId).getHeader()
             if (!hdr)
             {
                 res.send({nonehdr: true})

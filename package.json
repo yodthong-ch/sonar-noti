@@ -11,7 +11,7 @@
     "prebuild": "yarn test",
     "build": "babel src --out-dir build --extensions \".ts\" --source-maps inline",
     "start": "node build/server.js",
-    "test": "LIMIT_TOKEN=1 mocha -r ts-node/register tests/**/*.test.ts",
+    "test": "tsc && mocha -r ts-node/register tests/**/*.test.ts",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
   },
   "devDependencies": {
