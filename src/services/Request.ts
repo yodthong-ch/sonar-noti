@@ -7,7 +7,7 @@ type ClusterRequestOptions = {
     directTo?: string,
 }
 
-export type ClusterRequestFunc = <T = any>(endpoint: string, params: any, options?: ClusterRequestOptions)=>Promise<AxiosResponse<T>>
+export type ClusterRequestFunc<T = any> = (endpoint: string, params: any, options?: ClusterRequestOptions)=>Promise<T>
 
 export const clusterRequest:ClusterRequestFunc = async <T = any>(endpoint: string, params: any, options: ClusterRequestOptions = {}) => {
     const encData = AES.encrypt(JSON.stringify({

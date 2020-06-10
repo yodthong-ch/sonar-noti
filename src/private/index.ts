@@ -8,11 +8,8 @@ import {create as createBT} from '../connectors/beanstalkd'
 import { postHealthCheck } from './health'
 
 export default (app:Express) => {
-    if (!key) {
-        throw new Error(`private api: missing key`)
-    }
     
-    const decMiddle = DecodeMiddleware(key)
+    const decMiddle = DecodeMiddleware(key!)
 
     app.post('/chunk', decMiddle, PostChunk(
         ()=>DeviceToken.make(),

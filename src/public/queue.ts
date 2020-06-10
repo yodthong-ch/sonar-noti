@@ -65,11 +65,12 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                 status: "P",
             })
 
-            res.send({
+            res.status(200).send({
                 ack: true,
                 total,
                 id: hdrId,
             })
+            
 
             let chunkOffsets = []
             for (let i = 0; i < totalPage; i++)
