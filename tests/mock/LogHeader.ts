@@ -32,7 +32,7 @@ var mockObjectID = () => {
 export class MockLogHeader implements LogHeaderInterface {
     private _id?: string
 
-    async store(item: LogHeaderItem): Promise<string> {
+    async save(item: LogHeaderItem): Promise<string> {
         const mockId = mockObjectID()
         sampleData.push({
             _id: mockId,
@@ -57,12 +57,12 @@ export class MockLogHeader implements LogHeaderInterface {
         if (!this._id) throw new Error(`no set id`)
     }
 
-    setHeaderId(id: string): LogHeaderInterface {
+    setId(id: string): LogHeaderInterface {
         this._id = id
         return this
     }
 
-    getHeaderId(): string {
+    getId(): string {
         this.valid()
 
         return this._id!
@@ -97,7 +97,7 @@ export class MockLogHeader implements LogHeaderInterface {
 
     async flagDone(): Promise<boolean> {
         this.valid()
-        
+
         const idx = sampleData.findIndex( item => item._id === this._id)
         if (idx >= 0)
         {

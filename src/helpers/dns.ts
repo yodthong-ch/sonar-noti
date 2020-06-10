@@ -1,6 +1,6 @@
 import dns from 'dns'
 
-export const LookupIPs = (hostname: string) => {
+export const lookupIPs = (hostname: string) => {
     return  new Promise<string[]>( (res, rej) => dns.lookup(hostname, {all: true}, (err, addr) => {
         if (err)
         {

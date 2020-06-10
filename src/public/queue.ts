@@ -51,7 +51,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
 
             const hdr = LogHeaderDI()
 
-            const hdrId = await hdr.store({
+            const hdrId = await hdr.save({
                 createAt: new Date(),
                 program: data.program,
                 payload: data.payload,
@@ -86,7 +86,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                 await Promise.all(chunked.map( async c => {
 
                     const newChunk:ChunkPacket = {
-                        headerId: hdr.getHeaderId(),
+                        headerId: hdr.getId(),
                         target: data.target,
                         offset: c,
                         limit: LIMIT_TOKEN,

@@ -1,10 +1,10 @@
 import LogHeader from "../../items/LogHeader";
 
 interface LogHeaderInterface {
-    store(item:LogHeader):Promise<string>
+    save(item:LogHeader):Promise<string>
 
-    setHeaderId(id: string): LogHeaderInterface
-    getHeaderId(): string
+    setId(id: string): LogHeaderInterface
+    getId(): string
 
     getHeader(): Promise<LogHeader | null>
     chunkState(no: number, status: boolean): Promise<void>

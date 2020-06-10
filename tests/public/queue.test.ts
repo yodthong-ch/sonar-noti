@@ -39,7 +39,7 @@ describe('endpoint - public queue', () => {
         const expected = {
             ack: true,
             total: expectedDeviceMatch,
-            id: mockLog.getHeaderId(),
+            id: mockLog.getId(),
         }
 
         expect(mRes.send.calledWith(match(expected))).equal(true)

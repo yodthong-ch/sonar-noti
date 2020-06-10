@@ -70,11 +70,7 @@ export const connect = <T>({ service, collection, schema }:MongoDBConnect<T>) =>
   return connection.model(collection, schema, collection)
 }
 
-export const SCHOOL_SERVICE = 'school'
-export const ARTICLE_SERVICE = 'service_article'
-export const BOARD_SERVICE = 'service_board'
 export const NOTIFICATION_SERVICE = 'service_notification'
 export const USER_SERVICE = 'service_user'
-export const WRITER_SERVICE = 'service_writer'
 
 export const Mongoose = mongoose
