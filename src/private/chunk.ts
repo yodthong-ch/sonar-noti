@@ -1,6 +1,6 @@
 import {Request, Response} from 'express'
 import DeviceTokenInterface from '../repositories/interfaces/DeviceTokenInterface'
-import { ChunkPacket } from '../items/type'
+import { ChunkPacket } from '../items'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 
 import appIds, { DeviceType } from '../config/appid'

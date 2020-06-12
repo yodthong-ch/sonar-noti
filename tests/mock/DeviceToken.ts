@@ -1,6 +1,6 @@
 import DeviceTokenInterface from "../../src/repositories/interfaces/DeviceTokenInterface"
 import { DeviceType } from "../../src/config/appid"
-import TokenItem from "../../src/items/Token"
+import {Token as TokenItem} from "../../src/items"
 
 export const sampleData:TokenItem[] = [
     {

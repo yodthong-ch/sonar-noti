@@ -1,6 +1,6 @@
 import * as Express from 'express'
 import {AES} from '../helpers/crypt'
-import { InputPrivateParams } from '../items/type'
+import { InputPrivateParams } from '../items'
 export type DecodeMiddleware = (req: Express.Request, res: Express.Response, next: Express.NextFunction) => void
 export default (key: string):DecodeMiddleware => (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
     if (req.method !== 'POST')

@@ -1,5 +1,5 @@
 import LogHeaderInterface from "../../src/repositories/interfaces/LogHeaderInterface"
-import {default as LogHeaderItem} from "../../src/items/LogHeader"
+import {LogHeader as LogHeaderItem} from "../../src/items"
 
 const sampleData: LogHeaderItem[] = [
     {

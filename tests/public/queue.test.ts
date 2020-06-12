@@ -3,7 +3,7 @@ import { match, stub } from 'sinon'
 import {mockRequest, mockResponse} from 'mock-req-res'
 import { MockDeviceToken, sampleData as sampleDataToken } from '../mock/DeviceToken'
 import { MockLogHeader } from '../mock/LogHeader'
-import { InputQueue } from '../../src/items/type'
+import { InputQueue } from '../../src/items'
 import { postQueue } from '../../src/public/queue'
 import { ClusterRequestFunc } from '../../src/services/Request'
 

@@ -1,4 +1,4 @@
-import {BeanstalkServerStaging} from '../items/type'
+import {BeanstalkServerStaging} from '../items'
 
 export const servers:BeanstalkServerStaging = {
     production: {

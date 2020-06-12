@@ -1,4 +1,4 @@
-import LogHeader from "../../items/LogHeader";
+import {LogHeader} from "../../items";
 
 interface LogHeaderInterface {
     save(item:LogHeader):Promise<string>

@@ -1,4 +1,4 @@
-import {MongoDBGroupConfig} from '../items/type'
+import {MongoDBGroupConfig} from '../items'
 
 const config:MongoDBGroupConfig = {
   production: {

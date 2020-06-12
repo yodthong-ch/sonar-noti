@@ -1,6 +1,6 @@
 import DeviceTokenInterface from "./interfaces/DeviceTokenInterface"
 import DeviceTokenModel from '../models/mongo/service_user/devices'
-import Token from "../items/Token"
+import { Token } from "../items"
 import appIds, { DeviceType, convertDeviceType2Text } from '../config/appid'
 
 type QueryParams = {[option: string]: any}

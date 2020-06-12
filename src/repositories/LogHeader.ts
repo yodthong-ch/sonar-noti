@@ -1,7 +1,7 @@
 import LogHeaderInterface from "./interfaces/LogHeaderInterface"
 import LogHeaderModel from '../models/mongo/service_notification/log_header'
 
-import {default as LogHeaderItem} from "../items/LogHeader"
+import {LogHeader as LogHeaderItem} from "../items"
 
 class LogHeader implements LogHeaderInterface {
     private _id?: string

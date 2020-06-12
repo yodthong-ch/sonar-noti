@@ -1,4 +1,4 @@
-import InputLogDeviceFailed from "../../items/InputLogDeviceFailed";
+import {InputLogDeviceFailed} from "../../items";
 
 interface LogDeviceFailedInterface {
     save(input:InputLogDeviceFailed):Promise<string>

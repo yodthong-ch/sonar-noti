@@ -1,5 +1,5 @@
 import {Request, Response} from 'express'
-import {InputDeviceLogFailed} from '../items/type'
+import {InputDeviceLogFailed} from '../items'
 import LogDeviceFailedInterface from '../repositories/interfaces/LogDeviceFailedInterface'
 
 export const postLogFailed = (LogDeviceFailedDI: ()=> LogDeviceFailedInterface) =>

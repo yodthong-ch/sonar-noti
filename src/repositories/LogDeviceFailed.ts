@@ -1,6 +1,6 @@
 import LogDeviceFailedInterface from './interfaces/LogDeviceFailedInterface'
 import DeviceFailedModel from '../models/mongo/service_notification/log_device_failed'
-import InputLogDeviceFailed from '../items/InputLogDeviceFailed'
+import {InputLogDeviceFailed} from '../items'
 import appIds from '../config/appid'
 
 class LogDeviceFailedRepository implements LogDeviceFailedInterface {

@@ -1,4 +1,4 @@
-import Token from "../../items/Token";
+import { Token } from "../../items";
 import { DeviceType } from "../../config/appid";
 interface DeviceTokenInterface {
     register(appVersion: string, deviceType: DeviceType, deviceToken: string, userId?: number):Promise<boolean>

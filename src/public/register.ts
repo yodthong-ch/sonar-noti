@@ -1,6 +1,6 @@
 import DeviceTokenInterface from "../repositories/interfaces/DeviceTokenInterface"
 import {Request, Response} from 'express'
-import { InputRegisterToken } from "../items/type"
+import { InputRegisterToken } from "../items"
 import { convertDeviceType2Enum } from "../config/appid"
 
 export const postRegisterToken = (DeviceTokenDI:()=>DeviceTokenInterface) =>
