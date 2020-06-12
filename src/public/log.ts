@@ -4,7 +4,7 @@ import LogDeviceFailedInterface from '../repositories/interfaces/LogDeviceFailed
 
 export const postLogFailed = (LogDeviceFailedDI: ()=> LogDeviceFailedInterface) =>
     async (req: Request, res: Response) => {
-        const data = req.body as InputDeviceLogFailed
+        const data = <InputDeviceLogFailed>req.body
 
         try
         {

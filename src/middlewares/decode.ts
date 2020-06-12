@@ -11,7 +11,7 @@ export default (key: string):DecodeMiddleware => (req: Express.Request, res: Exp
         return
     }
 
-    const raw = req.body as string
+    const raw = <string>req.body
     
     if (!raw)
     {

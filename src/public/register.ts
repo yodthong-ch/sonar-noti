@@ -5,7 +5,7 @@ import { convertDeviceType2Enum } from "../config/appid"
 
 export const postRegisterToken = (DeviceTokenDI:()=>DeviceTokenInterface) =>
     async (req: Request, res: Response) => {
-        const data = req.body as InputRegisterToken
+        const data = <InputRegisterToken>req.body
         
         if (!data.appId || !data.deviceToken || !data.deviceType || !data.version)
         {

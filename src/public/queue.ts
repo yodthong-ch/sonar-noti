@@ -27,7 +27,7 @@ const valid = (input: InputQueue) => {
 
 export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface, ClusterRequestDI: ()=>ClusterRequestFunc) =>
     async (req: Request, res: Response) => {
-        const data = req.body as InputQueue
+        const data = <InputQueue>req.body
         const clusterRequest = ClusterRequestDI()
 
         try {
