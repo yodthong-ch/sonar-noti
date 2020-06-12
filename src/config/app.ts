@@ -3,13 +3,14 @@ export const key = process.env['PRIVATE_KEY']
 export const publicPort = 9000
 export const privatePort = 9001
 export const clusterName = process.env['CLUSTERNAME'] || 'localhost'
+export const clusterDiscovery = process.env['CLUSTERDISCOVERY'] || clusterName
 
 export const limitToken = parseInt(process.env['LIMIT_TOKEN'] || '5000')
 export const limitUser = parseInt(process.env['LIMIT_USER'] || '1000')
 
 if (!key)
 {
-    console.error(`[ERROR] PRIVATE_KET is unset`)
+    console.error(`[ERROR] PRIVATE_KEY is unset`)
     process.exit(1)
 }
 
@@ -28,3 +29,4 @@ if (limitUser < 1)
 console.log(`[INFO] LIMIT_TOKEN=${limitToken}`)
 console.log(`[INFO] LIMIT_USER=${limitUser}`)
 console.log(`[INFO] CLUSTERNAME=${clusterName}`)
+console.log(`[INFO] CLUSTERDISCOVERY=${clusterDiscovery}`)

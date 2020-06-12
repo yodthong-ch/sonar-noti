@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-centre-dev-service
+  labels:
+    app: notification-centre-dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: notification-centre-dev
+  template:
+    metadata:
+      labels:
+        app: notification-centre-dev
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: notification-centre-dev
+        env:
+          - name: PRIVATE_KEY
+            value: "testing123"
+          - name: CLUSTERNAME
+            value: "notification-private.default"
+          - name: CLUSTERDISCOVERY
+            value: "notification-discover.default"
+        image: registry.gitlab.com/lanxe/deploy-testing/notification-centre:1
+        ports:
+        - containerPort: 9000
+        - containerPort: 9001

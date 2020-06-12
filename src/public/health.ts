@@ -3,12 +3,12 @@ import { ClusterRequestFunc } from '../services/Request'
 import os from 'os'
 import { lookupIPs } from '../helpers/dns'
 
-export const getHealthCheck = (clusterName: string, ClusterRequestDI:()=>ClusterRequestFunc) =>
+export const getHealthCheck = (clusterName: string, clusterDiscovery: string, ClusterRequestDI:()=>ClusterRequestFunc) =>
     async (req: Request, res: Response) => {
         const clusterRequest = ClusterRequestDI()
         try
         {
-            const clusterIps = await lookupIPs(clusterName)
+            const clusterIps = await lookupIPs(clusterDiscovery)
 
             res.send({
                 me: os.hostname(),
