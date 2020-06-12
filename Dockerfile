@@ -22,4 +22,5 @@ RUN apt-get update && apt-get install -y curl \
     && yarn install --production \
     && yarn cache clean \
     && rm -rf /var/lib/apt/lists/*
+EXPOSE 9000 9001
 CMD ["node", "build/server.js"]
