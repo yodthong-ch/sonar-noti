@@ -3,17 +3,21 @@ import DeviceTokenInterface from '../repositories/interfaces/DeviceTokenInterfac
 import { ChunkPacket } from '../items'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 
-import appIds, { DeviceType } from '../config/appid'
+import { DeviceType } from '../config/appid'
 import QueueInterface from '../connectors/QueueInterface'
+import { setState } from '../libs/state'
 
 export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface, QueueDI: (tube:string)=>Promise<QueueInterface>) =>
     async (req: Request, res: Response) => {
+
         const data = <ChunkPacket>req.body
         try
         {
+            setState('working_priv_chunk', true)
             const hdr = await LogHeaderDI().setId(data.headerId).getHeader()
             if (!hdr)
             {
+                setState('working_priv_chunk', false)
                 res.send({nonehdr: true})
                 return;
             }
@@ -45,6 +49,10 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
         catch (err)
         {
             res.send({error: true})
+        }
+        finally
+        {
+            setState('working_priv_chunk', false)
         }
     }
 

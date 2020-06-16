@@ -4,6 +4,7 @@ import {InputQueue, ChunkPacket} from '../items'
 import { ClusterRequestFunc } from '../services/Request'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 import appIds from '../config/appid'
+import { setState } from '../libs/state'
 
 const LIMIT_TOKEN = 5000,
         LIMIT_PRIVATE_CONN = 10
@@ -31,6 +32,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
         const clusterRequest = ClusterRequestDI()
 
         try {
+            setState('working_queue', true)
             valid(data)
 
             const token = DeviceTokenDI()
@@ -113,6 +115,10 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
         {
             console.error(err)
             res.status(500).send({error: err.message})
+        }
+        finally
+        {
+            setState('working_queue', false)
         }
         
     }

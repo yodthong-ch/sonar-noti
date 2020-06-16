@@ -3,6 +3,16 @@ import { ClusterRequestFunc } from '../services/Request'
 import os from 'os'
 import { lookupIPs } from '../helpers/dns'
 
+import {getState} from '../libs/state'
+
+export const getLivenessCheck = () => 
+    async (req: Request, res: Response) => {
+        const ok = getState('stillAlive') === true ||
+            getState('working_queue') === true ||
+            getState('working_priv_chunk') === true
+        res.status(ok ? 200 : 500).send({ ok })
+    }
+
 export const getHealthCheck = (clusterName: string, clusterDiscovery: string, ClusterRequestDI:()=>ClusterRequestFunc) =>
     async (req: Request, res: Response) => {
         const clusterRequest = ClusterRequestDI()
