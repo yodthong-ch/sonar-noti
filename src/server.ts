@@ -4,7 +4,8 @@ import PublicAPI from './public'
 import {publicPort, privatePort} from './config/app'
 import ReadyMiddleware from './middlewares/ready'
 import './libs/state'
-import { getState } from './libs/state'
+import { getState, bind as HCBind, EVENT_SHUTDOWN } from './libs/state'
+import log from './libs/log'
 
 const app = express(),
     privateApp = express()
@@ -23,9 +24,30 @@ PrivateAPI(privateApp)
 PublicAPI(app)
 
 app.listen(publicPort, () => {
-    console.log(`Running Public API :${publicPort}`)
+    log.info(`Running Public API :${publicPort}`)
 })
 
 privateApp.listen(privatePort, () => {
-    console.log(`Running Private API :${privatePort}`)
+    log.info(`Running Private API :${privatePort}`)
+})
+
+HCBind(EVENT_SHUTDOWN, async()=>{
+    log.info("shutting down")
+  
+    const recheckWorkingState = () => {
+      log.warn("check working....")
+  
+      if (getState('working') !== true)
+      {
+        log.warn("no working exiting")
+        process.exit(0)
+      }
+      else
+      {
+        log.warn("still working attempt check....")
+        setTimeout(recheckWorkingState, 5000) 
+      }
+    }
+  
+    recheckWorkingState()
 })

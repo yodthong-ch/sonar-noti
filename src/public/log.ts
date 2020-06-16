@@ -1,6 +1,7 @@
 import {Request, Response} from 'express'
 import {InputDeviceLogFailed} from '../items'
 import LogDeviceFailedInterface from '../repositories/interfaces/LogDeviceFailedInterface'
+import log from '../libs/log'
 
 export const postLogFailed = (LogDeviceFailedDI: ()=> LogDeviceFailedInterface) =>
     async (req: Request, res: Response) => {
@@ -22,7 +23,8 @@ export const postLogFailed = (LogDeviceFailedDI: ()=> LogDeviceFailedInterface) 
             res.send({ id })
         }
         catch (error) {
-            res.status(500).send({error})
+            res.status(500).send({error: error.message})
+            log.error(error)
         }
     }
 export default postLogFailed
