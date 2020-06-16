@@ -111,6 +111,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
         }
         catch (err)
         {
+            console.error(err)
             res.status(500).send({error: err.message})
         }
         

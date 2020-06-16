@@ -1,3 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: notification-centre-secret
+data:
+  privatekey: MDhmZGY5ZTNmNjUzMzA1N2E5YzkyMDdkZmU0NDZjMzUzN2Y5MTMzZWRhYWI0ZGNmNDRlMTRhZTY0MzQwMWY3Mwo=
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,12 +27,15 @@ spec:
       - name: notification-centre-dev
         env:
           - name: PRIVATE_KEY
-            value: "testing123"
+            valueFrom:
+              secretKeyRef:
+                name: notification-centre-secret
+                key: privatekey
           - name: CLUSTERNAME
             value: "notification-private.default"
           - name: CLUSTERDISCOVERY
             value: "notification-discover.default"
-        image: registry.gitlab.com/lanxe/deploy-testing/notification-centre:1
+        image: asia.gcr.io/production-devops/service/notification-centre:dev
         ports:
         - containerPort: 9000
         - containerPort: 9001
