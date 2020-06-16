@@ -6,10 +6,10 @@ import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 import { DeviceType } from '../config/appid'
 import QueueInterface from '../connectors/QueueInterface'
 import { setState } from '../libs/state'
+import log from '../libs/log'
 
 export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface, QueueDI: (tube:string)=>Promise<QueueInterface>) =>
     async (req: Request, res: Response) => {
-
         const data = <ChunkPacket>req.body
         try
         {
@@ -49,6 +49,7 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
         catch (err)
         {
             res.send({error: true})
+            log.error(err)
         }
         finally
         {

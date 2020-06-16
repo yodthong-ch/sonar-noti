@@ -5,6 +5,7 @@ import { ClusterRequestFunc } from '../services/Request'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 import appIds from '../config/appid'
 import { setState } from '../libs/state'
+import log from '../libs/log'
 
 const LIMIT_TOKEN = 5000,
         LIMIT_PRIVATE_CONN = 10
@@ -114,6 +115,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
         catch (err)
         {
             res.status(500).send({error: err.message})
+            log.error(err)
         }
         finally
         {

@@ -2,6 +2,7 @@ import DeviceTokenInterface from "../repositories/interfaces/DeviceTokenInterfac
 import {Request, Response} from 'express'
 import { InputRegisterToken } from "../items"
 import { convertDeviceType2Enum } from "../config/appid"
+import log from "../libs/log"
 
 export const postRegisterToken = (DeviceTokenDI:()=>DeviceTokenInterface) =>
     async (req: Request, res: Response) => {
@@ -23,5 +24,6 @@ export const postRegisterToken = (DeviceTokenDI:()=>DeviceTokenInterface) =>
         catch (err)
         {
             res.status(500).send({error: err.message})
+            log.error(err)
         }
     }

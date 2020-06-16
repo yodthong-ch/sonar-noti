@@ -6,7 +6,7 @@
   "license": "Proprietary",
   "private": true,
   "scripts": {
-    "dev": "PRIVATE_KEY=test123456 APP_ENV=development nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "dev": "PRIVATE_KEY=test123456 APP_ENV=development nodemon --signal SIGTERM --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
     "check": "tsc --noEmit",
     "prebuild": "yarn test",
     "build": "babel src --out-dir build --extensions \".ts\" --source-maps inline",
@@ -53,6 +53,7 @@
     "mongoose": "^5.9.15",
     "mysql": "^2.18.1",
     "redis": "^3.0.2",
-    "sqlstring": "^2.3.2"
+    "sqlstring": "^2.3.2",
+    "winston": "^3.2.1"
   }
 }

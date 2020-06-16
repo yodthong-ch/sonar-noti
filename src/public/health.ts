@@ -4,6 +4,7 @@ import os from 'os'
 import { lookupIPs } from '../helpers/dns'
 
 import {getState} from '../libs/state'
+import log from '../libs/log'
 
 export const getLivenessCheck = () => 
     async (req: Request, res: Response) => {
@@ -48,5 +49,6 @@ export const getHealthCheck = (clusterName: string, clusterDiscovery: string, Cl
         catch (err)
         {
             res.status(500).send(err.message)
+            log.error(err)
         }
     }
