@@ -21,8 +21,6 @@ spec:
       labels:
         app: notification-centre-dev
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
       - name: notification-centre-dev
         env:
@@ -35,6 +33,8 @@ spec:
             value: "notification-private.default"
           - name: CLUSTERDISCOVERY
             value: "notification-discover.default"
+          - name: APP_ENV
+            value: "development"
         image: asia.gcr.io/production-devops/service/notification-centre:dev
         ports:
         - containerPort: 9000
