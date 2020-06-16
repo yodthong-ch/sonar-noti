@@ -3,7 +3,7 @@ kind: Secret
 metadata:
   name: notification-centre-secret
 data:
-  privatekey: MDhmZGY5ZTNmNjUzMzA1N2E5YzkyMDdkZmU0NDZjMzUzN2Y5MTMzZWRhYWI0ZGNmNDRlMTRhZTY0MzQwMWY3Mwo=
+  privatekey: NzNlYzE0MTFmY2FiYWM3ODVmMTc1MzIwMjJhNWI4ODY0ZGY5NmFjMDAzOTBmZmE0ZTg1YzdkYjQ5MmM3ZDA4MA==
 ---
 apiVersion: apps/v1
 kind: Deployment
