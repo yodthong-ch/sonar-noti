@@ -1,2 +1,3 @@
-Notification Centre Readme
-WIP
+**Notification Centre Readme**
+
+Status: Development Staging
