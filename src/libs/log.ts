@@ -1,7 +1,10 @@
 import {createLogger, format, transports} from 'winston'
-
+import os from 'os'
 const log = createLogger({
-    defaultMeta: 'notification-centre',
+    defaultMeta: {
+        app: 'notification-centre',
+        hostname: os.hostname(),
+    },
     format: format.combine(
         format.timestamp({
           format: 'YYYY-MM-DD HH:mm:ss'

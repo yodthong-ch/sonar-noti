@@ -8,21 +8,21 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: notification-centre-dev-service
+  name: notification-centre-service
   labels:
-    app: notification-centre-dev
+    app: notification-centre
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: notification-centre-dev
+      app: notification-centre
   template:
     metadata:
       labels:
-        app: notification-centre-dev
+        app: notification-centre
     spec:
       containers:
-      - name: notification-centre-dev
+      - name: notification-centre
         env:
           - name: PRIVATE_KEY
             valueFrom:
@@ -35,7 +35,7 @@ spec:
             value: "notification-discover.default"
           - name: APP_ENV
             value: "development"
-        image: asia.gcr.io/production-devops/service/notification-centre:dev
+        image: asia.gcr.io/productionops/service/notification-centre:dev
         ports:
         - containerPort: 9000
         - containerPort: 9001

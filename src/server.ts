@@ -1,11 +1,35 @@
 import express from 'express'
 import PrivateAPI from './private'
 import PublicAPI from './public'
-import {publicPort, privatePort} from './config/app'
+import {publicPort, privatePort, key, limitToken, limitUser, clusterName, clusterDiscovery} from './config/app'
 import ReadyMiddleware from './middlewares/ready'
 import './libs/state'
 import { getState, bind as HCBind, EVENT_SHUTDOWN } from './libs/state'
 import log from './libs/log'
+
+if (!key)
+{
+    log.error(`[ERROR] PRIVATE_KEY is unset`)
+    process.exit(1)
+}
+
+if (limitToken < 1)
+{
+    log.error(`[ERROR] LIMIT_TOKEN must more than zero`)
+    process.exit(1)
+}
+
+if (limitUser < 1)
+{
+    log.error(`[ERROR] LIMIT_USER must more than zero`)
+    process.exit(1)
+}
+
+log.info(`[INFO] LIMIT_TOKEN=${limitToken}`)
+log.info(`[INFO] LIMIT_USER=${limitUser}`)
+log.info(`[INFO] CLUSTERNAME=${clusterName}`)
+log.info(`[INFO] CLUSTERDISCOVERY=${clusterDiscovery}`)
+
 
 const app = express(),
     privateApp = express()
