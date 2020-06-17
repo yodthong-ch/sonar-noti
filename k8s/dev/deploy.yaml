@@ -31,7 +31,7 @@ spec:
           periodSeconds: 3
         readinessProbe:
           httpGet:
-            path: /liveness
+            path: /readieness
             port: 9000
           initialDelaySeconds: 5
           periodSeconds: 10
