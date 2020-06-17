@@ -4,7 +4,7 @@ metadata:
   name: notification-discover
 spec:
   selector:
-    app: notification-centre-dev
+    app: notification-centre
   clusterIP: 'None'
 ---
 apiVersion: v1
@@ -13,7 +13,7 @@ metadata:
   name: notification-private
 spec:
   selector:
-    app: notification-centre-dev
+    app: notification-centre
   ports:
     - protocol: TCP
       port: 9001
@@ -24,7 +24,7 @@ metadata:
   name: notification-public
 spec:
   selector:
-    app: notification-centre-dev
+    app: notification-centre
   type: LoadBalancer
   ports:
     - protocol: TCP
