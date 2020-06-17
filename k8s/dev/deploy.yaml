@@ -23,6 +23,18 @@ spec:
     spec:
       containers:
       - name: notification-centre
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 9000
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /readieness
+            port: 9000
+          initialDelaySeconds: 5
+          periodSeconds: 10
         env:
           - name: PRIVATE_KEY
             valueFrom:

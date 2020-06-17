@@ -6,7 +6,7 @@ import { lookupIPs } from '../helpers/dns'
 import {getState} from '../libs/state'
 import log from '../libs/log'
 
-export const getLivenessCheck = () => 
+export const getReadienessCheck = () => 
     async (req: Request, res: Response) => {
         const ok = getState('stillAlive') === true ||
             getState('working_queue') === true ||
