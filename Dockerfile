@@ -1,5 +1,5 @@
 ### --- Begin of Base ---
-FROM node:10.15.3-slim as base
+FROM node:10.15.3-alpine as base
 ENV NODE_ENV=development \
     APP_ENV=development
 WORKDIR /app
@@ -11,16 +11,11 @@ RUN yarn build \
 
 ### --- End of Base ---
 
-FROM node:10.15.3-slim
+FROM node:10.15.3-alpine
 ENV NODE_ENV=production \
     APP_ENV=production \
     TZ=Asia/Bangkok
-ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /tini
-RUN chmod +x /tini \
-    && apt-get update \
-    && apt-get install -y procps tzdata \
-    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-    && dpkg-reconfigure --frontend noninteractive tzdata
+RUN apk add --no-cache tini tzdata
 
 WORKDIR /app
 COPY package.json /app
@@ -29,4 +24,4 @@ RUN yarn install --production \
     && yarn cache clean \
     && rm -rf /var/lib/apt/lists/*
 EXPOSE 9000 9001
-CMD ["/tini", "--", "node", "build/server.js"]
+CMD ["tini", "--", "node", "build/server.js"]
