@@ -25,6 +25,3 @@ RUN yarn install --production \
     && rm -rf /var/lib/apt/lists/*
 EXPOSE 9000 9001
 CMD ["tini", "--", "node", "build/server.js"]
-
-# test merge request
-# test merge request
