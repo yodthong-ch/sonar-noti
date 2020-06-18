@@ -8,7 +8,7 @@ import { setState } from '../libs/state'
 import log from '../libs/log'
 
 const LIMIT_TOKEN = 5000,
-        LIMIT_PRIVATE_CONN = 10
+        LIMIT_PRIVATE_CONN = 3
 
 const valid = (input: InputQueue) => {
     if (!input)
@@ -73,8 +73,10 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                 total,
                 id: hdrId,
             })
-            
 
+            log.info(`start: ${hdr.getId()}`)
+            
+            log.info(`totalPage: ${totalPage}`)
             let chunkOffsets = []
             for (let i = 0; i < totalPage; i++)
             {
@@ -85,7 +87,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
             while (ccnt < totalPage)
             {
                 const chunked = chunkOffsets.slice(ccnt, ccnt + LIMIT_PRIVATE_CONN)
-
+                log.info(`run chunk -> ${chunked.toString()}`)
                 await Promise.all(chunked.map( async c => {
 
                     const newChunk:ChunkPacket = {
@@ -109,7 +111,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
 
                 ccnt += chunked.length
             }
-
+            log.info(`done: ${hdr.getId()}`)
             hdr.flagDone()
         }
         catch (err)
