@@ -55,6 +55,7 @@ export const create = async(tubeName: string) => {
   {
     const conenctor = await connect(tubeSelect.server)
     conn = new BeanstalkQueue(conenctor, tubeSelect.name)
+    connections[tubeName] = conn
   }
   return conn
 }
