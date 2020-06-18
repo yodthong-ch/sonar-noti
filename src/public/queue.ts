@@ -8,7 +8,7 @@ import { setState } from '../libs/state'
 import log from '../libs/log'
 
 const LIMIT_TOKEN = 5000,
-        LIMIT_PRIVATE_CONN = 3
+        LIMIT_PRIVATE_CONN = 1
 
 const valid = (input: InputQueue) => {
     if (!input)
