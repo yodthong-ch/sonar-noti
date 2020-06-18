@@ -50,14 +50,16 @@ export const create = async(tubeName: string) => {
     throw new Error(`${tubeName} not configurated`)
   }
 
-  let conn = connections[tubeName]
-  if (!conn)
+  if (!connections[tubeName])
   {
     const conenctor = await connect(tubeSelect.server)
-    conn = new BeanstalkQueue(conenctor, tubeSelect.name)
-    connections[tubeName] = conn
+    connections[tubeName] = new BeanstalkQueue(conenctor, tubeSelect.name)
+    console.warn("CREATE")
   }
-  return conn
+  else{
+    console.warn("EXIST")
+  }
+  return connections[tubeName]
 }
 
 export default create
