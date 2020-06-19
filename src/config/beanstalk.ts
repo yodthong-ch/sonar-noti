@@ -9,7 +9,7 @@ export const servers:BeanstalkServerStaging = {
     },
     development: {
       default: {
-        host: 'localhost',
+        host: '172.17.100.132',
         port: 11300,
       },
     },
