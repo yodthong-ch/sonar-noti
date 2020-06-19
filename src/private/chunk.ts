@@ -38,18 +38,25 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                 payload: hdr.payload,
             }
 
-            for (const item of tokens)
+            let ccnt = 0
+            const limitChunkToken = 100
+            while (ccnt < tokens.length)
             {
-                if (item.deviceType.indexOf(DeviceType.FIREBASE) >= 0)
+                const chunked = tokens.slice(ccnt, ccnt + limitChunkToken)
+                for (const item of chunked)
                 {
-                    const bt = await QueueDI('FIREBASE_API')
-                    const payloadWithToken = {
-                        ...payloadMain,
-                        userId: item.userId || 0,
-                        token: item.token,
+                    if (item.deviceType.indexOf(DeviceType.FIREBASE) >= 0)
+                    {
+                        const bt = await QueueDI('FIREBASE_API')
+                        const payloadWithToken = {
+                            ...payloadMain,
+                            userId: item.userId || 0,
+                            token: item.token,
+                        }
+                        bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)))
                     }
-                    bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)))
                 }
+                ccnt += chunked.length
             }
         }
         catch (err)

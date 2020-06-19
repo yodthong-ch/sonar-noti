@@ -36,7 +36,6 @@ class BeanstalkQueue implements QueueInterface {
   }
 
   async put(payload: string, {delay}:PutOption = {}): Promise<void> {
-    await this.bt.use(this.tubeName)
     await this.bt.put(payload, { delay })
   }
 }
@@ -51,6 +50,7 @@ export const create = async(tubeName: string) => {
   if (!connections[tubeName])
   {
     const conenctor = await connect(tubeSelect.server)
+    await conenctor.use(tubeSelect.name)
     connections[tubeName] = new BeanstalkQueue(conenctor, tubeSelect.name)
     console.warn("CREATE")
   }
