@@ -32,7 +32,7 @@ describe('endpoint - public queue', () => {
                 return true;
             }
         
-        await postQueue(() => mock, () => mockLog, ()=>mockCluster)(mReq, mRes)
+        await postQueue(() => mock, () => mockLog, ()=>mockCluster, 10, 2)(mReq, mRes)
 
         expect(mRes.status.calledWith(200)).equal(true)
 
@@ -56,7 +56,7 @@ describe('endpoint - public queue', () => {
                 return true;
             }
         
-        await postQueue(() => mock, () => mockLog, ()=>mockCluster)(mReq, mRes)
+        await postQueue(() => mock, () => mockLog, ()=>mockCluster, 10, 1)(mReq, mRes)
 
         expect(mRes.status.calledWith(500)).equal(true)
     })

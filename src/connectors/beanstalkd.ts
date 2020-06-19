@@ -1,5 +1,5 @@
 import JackdClient from 'jackd'
-import { get, isEmpty } from 'lodash'
+// import { get, isEmpty } from 'lodash'
 import { aliases, servers, tubes } from '../config/beanstalk'
 import { applicationEnvironment } from '../config/app'
 import QueueInterface, { PutOption } from './QueueInterface'
@@ -21,8 +21,6 @@ const connect = async (server = 'default') => {
     host: options.host,
     port: options.port,
   })
-
-  // await connection.use(tubeSelect.name)
 
   return connection
 }
@@ -57,7 +55,7 @@ export const create = async(tubeName: string) => {
     console.warn("CREATE")
   }
   else{
-    console.warn("EXIST")
+
   }
   return connections[tubeName]
 }

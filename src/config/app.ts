@@ -7,3 +7,4 @@ export const clusterDiscovery = process.env['CLUSTERDISCOVERY'] || clusterName
 
 export const limitToken = parseInt(process.env['LIMIT_TOKEN'] || '5000')
 export const limitUser = parseInt(process.env['LIMIT_USER'] || '1000')
+export const limitPrivateConn = parseInt(process.env['LIMIT_PRIVATE_CONN'] || '2')

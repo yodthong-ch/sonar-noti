@@ -7,9 +7,6 @@ import appIds from '../config/appid'
 import { setState } from '../libs/state'
 import log from '../libs/log'
 
-const LIMIT_TOKEN = 5000,
-        LIMIT_PRIVATE_CONN = 1
-
 const valid = (input: InputQueue) => {
     if (!input)
         throw new Error(`input require`)
@@ -27,7 +24,13 @@ const valid = (input: InputQueue) => {
         throw new Error(`${input.target.appId} invalid`)
 }
 
-export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface, ClusterRequestDI: ()=>ClusterRequestFunc) =>
+export const postQueue = (
+        DeviceTokenDI:()=>DeviceTokenInterface,
+        LogHeaderDI: ()=> LogHeaderInterface,
+        ClusterRequestDI: ()=>ClusterRequestFunc,
+        LIMIT_TOKEN:number,
+        LIMIT_PRIVATE_CONN:number
+    ) =>
     async (req: Request, res: Response) => {
         const data = <InputQueue>req.body
         const clusterRequest = ClusterRequestDI()
@@ -87,7 +90,7 @@ export const postQueue = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
             while (ccnt < totalPage)
             {
                 const chunked = chunkOffsets.slice(ccnt, ccnt + LIMIT_PRIVATE_CONN)
-                log.info(`run chunk -> ${chunked.toString()}`)
+                log.info(`run chunk -> ${chunked.toString()}`, {chunked})
                 await Promise.all(chunked.map( async c => {
 
                     const newChunk:ChunkPacket = {

@@ -30,21 +30,27 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
             const tokens = await device.chunk(data.offset, data.limit)
             res.send({token: tokens.length})
 
-            tokens.map( async item => {
+            const payloadMain:{[key: string]: any} = {
+                appId: data.target.appId,
+                program: hdr.program,
+                headerId: hdr._id,
+                chunk: data.offset,
+                payload: hdr.payload,
+            }
+
+            for (const item of tokens)
+            {
                 if (item.deviceType.indexOf(DeviceType.FIREBASE) >= 0)
                 {
                     const bt = await QueueDI('FIREBASE_API')
-                    bt.put(encodeURIComponent(JSON.stringify({
-                        appId: data.target.appId,
-                        program: hdr.program,
-                        headerId: hdr._id,
-                        chunk: data.offset,
+                    const payloadWithToken = {
+                        ...payloadMain,
                         userId: item.userId || 0,
                         token: item.token,
-                        payload: hdr.payload,
-                    })))
+                    }
+                    bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)))
                 }
-            })
+            }
         }
         catch (err)
         {
