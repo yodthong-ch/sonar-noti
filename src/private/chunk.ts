@@ -57,9 +57,9 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
             for (const dtype of Object.keys(groupDeviceType))
             {
                 const tokens = groupDeviceType[dtype]
-                const tokenMapUserId = tokens.map(item => ({
-                    [item.token]: item.userId || 0
-                }))
+                const tokenMapUserId = tokens.reduce<{[token: string]: number}>( (carry, token) => {
+                    return {...carry, [token.token]: token.userId || 0}
+                }, {})
 
                 if (dtype.indexOf(DeviceType.FIREBASE) >= 0)
                 {
