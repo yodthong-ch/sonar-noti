@@ -1,12 +1,14 @@
 import {Request, Response} from 'express'
 import DeviceTokenInterface from '../repositories/interfaces/DeviceTokenInterface'
-import { ChunkPacket } from '../items'
+import { ChunkPacket, Token } from '../items'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 
 import { DeviceType } from '../config/appid'
 import QueueInterface from '../connectors/QueueInterface'
 import { setState } from '../libs/state'
 import log from '../libs/log'
+
+type TokenSet = {[type: string]: Token[]}
 
 export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface, QueueDI: (tube:string)=>Promise<QueueInterface>) =>
     async (req: Request, res: Response) => {
@@ -38,7 +40,35 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                 payload: hdr.payload,
             }
 
-            let ccnt = 0
+            const groupDeviceType = tokens.reduce<TokenSet>((carry, item) => {
+                return {
+                    ...carry,
+                    [item.deviceType]: [
+                        ...carry[item.deviceType],
+                        item,
+                    ],
+                }
+            }, {})
+
+            for (const dtype of Object.keys(groupDeviceType))
+            {
+                const tokens = groupDeviceType[dtype]
+                const tokenMapUserId = tokens.map(item => ({
+                    [item.token]: item.userId || 0
+                }))
+
+                if (dtype.indexOf(DeviceType.FIREBASE) >= 0)
+                {
+                    const bt = await QueueDI('FIREBASE_API')
+                    const payloadWithToken = {
+                        ...payloadMain,
+                        tokens: tokenMapUserId,
+                    }
+                    bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)))
+                }
+            }
+
+            /*let ccnt = 0
             const limitChunkToken = 100
             while (ccnt < tokens.length)
             {
@@ -56,8 +86,9 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                         bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)))
                     }
                 }
+
                 ccnt += chunked.length
-            }
+            }*/
         }
         catch (err)
         {
