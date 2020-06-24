@@ -13,6 +13,7 @@ type TokenSet = {[type: string]: Token[]}
 export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface, QueueDI: (tube:string)=>Promise<QueueInterface>) =>
     async (req: Request, res: Response) => {
         const data = <ChunkPacket>req.body
+        let isSend:boolean = false
         try
         {
             setState('working_priv_chunk', true)
@@ -21,6 +22,7 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
             {
                 setState('working_priv_chunk', false)
                 res.send({nonehdr: true})
+                isSend = true
                 return;
             }
 
@@ -31,6 +33,7 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
 
             const tokens = await device.chunk(data.offset, data.limit)
             res.send({token: tokens.length})
+            isSend = true
 
             const payloadMain:{[key: string]: any} = {
                 appId: data.target.appId,
@@ -41,10 +44,11 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
             }
 
             const groupDeviceType = tokens.reduce<TokenSet>((carry, item) => {
+                const carryToken = carry[item.deviceType] || []
                 return {
                     ...carry,
                     [item.deviceType]: [
-                        ...carry[item.deviceType],
+                        ...carryToken,
                         item,
                     ],
                 }
@@ -92,7 +96,10 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
         }
         catch (err)
         {
-            res.send({error: true})
+            if (!isSend)
+            {
+                res.send({error: err.message})
+            }
             log.error(err)
         }
         finally
