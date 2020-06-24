@@ -56,19 +56,28 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
 
             for (const dtype of Object.keys(groupDeviceType))
             {
-                const tokens = groupDeviceType[dtype]
-                const tokenMapUserId = tokens.reduce<{[token: string]: number}>( (carry, token) => {
-                    return {...carry, [token.token]: token.userId || 0}
-                }, {})
+                let offsetBT = 0
+                const tokens = groupDeviceType[dtype],
+                      totalToken = tokens.length
 
-                if (dtype.indexOf(DeviceType.FIREBASE) >= 0)
+                while (offsetBT < totalToken)
                 {
-                    const bt = await QueueDI('FIREBASE_API')
-                    const payloadWithToken = {
-                        ...payloadMain,
-                        tokens: tokenMapUserId,
+                    const sliceToken = tokens.slice(offsetBT, offsetBT + 200)
+                    const tokenMapUserId = sliceToken.reduce<{[token: string]: number}>( (carry, token) => {
+                        return {...carry, [token.token]: token.userId || 0}
+                    }, {})
+
+                    if (dtype.indexOf(DeviceType.FIREBASE) >= 0)
+                    {
+                        const bt = await QueueDI('FIREBASE_API')
+                        const payloadWithToken = {
+                            ...payloadMain,
+                            tokens: tokenMapUserId,
+                        }
+                        bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)))
                     }
-                    bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)))
+
+                    offsetBT += sliceToken.length
                 }
             }
 
