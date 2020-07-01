@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-discover
+spec:
+  selector:
+    app: notification-centre
+  clusterIP: 'None'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-private
+spec:
+  selector:
+    app: notification-centre
+  ports:
+    - protocol: TCP
+      port: 9001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-public
+spec:
+  selector:
+    app: notification-centre
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 9000
+  externalIPs:
+    - 192.168.99.100
+

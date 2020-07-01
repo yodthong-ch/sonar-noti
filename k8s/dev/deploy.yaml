@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: notification-centre-secret
+data:
+  privatekey: NzNlYzE0MTFmY2FiYWM3ODVmMTc1MzIwMjJhNWI4ODY0ZGY5NmFjMDAzOTBmZmE0ZTg1YzdkYjQ5MmM3ZDA4MA==
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-centre-service
+  labels:
+    app: notification-centre
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: notification-centre
+  template:
+    metadata:
+      labels:
+        app: notification-centre
+    spec:
+      containers:
+      - name: notification-centre
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 9000
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /readieness
+            port: 9000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        env:
+          - name: PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: notification-centre-secret
+                key: privatekey
+          - name: CLUSTERNAME
+            value: "notification-private.default"
+          - name: CLUSTERDISCOVERY
+            value: "notification-discover.default"
+          - name: APP_ENV
+            value: "development"
+        image: asia.gcr.io/productionops/service/notification-centre:dev
+        ports:
+        - containerPort: 9000
+        - containerPort: 9001
