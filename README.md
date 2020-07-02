@@ -1,3 +1,3 @@
 **Notification Centre Readme**
 
-Status: Development Staging
+Status: Testing
