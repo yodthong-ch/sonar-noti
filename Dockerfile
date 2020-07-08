@@ -19,9 +19,9 @@ RUN apk add --no-cache tini tzdata
 
 WORKDIR /app
 COPY package.json /app
-COPY --from=base /app/build /app/build
 RUN yarn install --production \
     && yarn cache clean \
     && rm -rf /var/lib/apt/lists/*
+COPY --from=base /app/build /app/build
 EXPOSE 9000 9001
 CMD ["tini", "--", "node", "build/server.js"]
