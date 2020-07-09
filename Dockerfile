@@ -8,12 +8,12 @@ WORKDIR /app
 
 COPY package.json yarn.loc* /app/
 
-RUN yarn install
+RUN yarn install \
+    && yarn cache clean
 
 COPY . /app
 
-RUN yarn build \
-    && yarn cache clean
+RUN yarn build
 ### --- End of Builder ---
 
 FROM node:10.15.3-alpine
