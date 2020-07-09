@@ -7,8 +7,6 @@ import './libs/state'
 import { getState, bind as HCBind, EVENT_SHUTDOWN } from './libs/state'
 import log from './libs/log'
 
-// Test docker image cache
-
 if (!key)
 {
     log.error(`[ERROR] PRIVATE_KEY is unset`)
