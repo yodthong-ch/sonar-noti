@@ -74,7 +74,7 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                             ...payloadMain,
                             tokens: tokenMapUserId,
                         }
-                        bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)))
+                        bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)), hdr.options)
                     }
 
                     offsetBT += sliceToken.length

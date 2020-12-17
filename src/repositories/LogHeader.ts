@@ -23,6 +23,7 @@ class LogHeader implements LogHeaderInterface {
                 userIds: item.target.userIds,
                 deviceMatch: item.target.deviceMatch,
             },
+            options: item.options,
             status: 'P',
         })
 
@@ -59,6 +60,7 @@ class LogHeader implements LogHeaderInterface {
             payload: result.get('payload'),
             chunks: result.get('chunks'),
             target: result.get('target'),
+            options: result.get('options'),
             status: result.get('status'),
         }
     }
