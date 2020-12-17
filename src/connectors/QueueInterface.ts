@@ -1,5 +1,5 @@
 export type PutOption = {
-    delay?: number,
+    delay?: number, // in seconds
 }
 
 interface QueueInterface {
