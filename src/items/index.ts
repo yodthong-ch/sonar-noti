@@ -4,7 +4,7 @@ export type BeanstalkServerConfig = {
     host: string,
     port: number,
   }
-  
+
 export type BeanstalkServerStaging = {
     [staging:string]: {
       [name:string]: BeanstalkServerConfig,
@@ -29,11 +29,16 @@ export type InputQueueTarget = {
 
 export type InputQueuePayload = {[x:string]: any}
 
+export type InputQueueOptions = {
+    delay?: number
+}
+
 export type InputQueue = {
     payload: InputQueuePayload,
     program: string,
     target: InputQueueTarget,
     tags?: string[],
+    options?: InputQueueOptions
 }
 
 export type ChunkPacket = {
@@ -88,6 +93,7 @@ export type LogHeader = {
       userIds?: number[],
       deviceMatch: number,
   },
+  options?: InputQueueOptions,
   status: string,
 }
 

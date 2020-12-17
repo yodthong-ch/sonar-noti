@@ -12,7 +12,7 @@ const valid = (input: InputQueue) => {
         throw new Error(`input require`)
     if (!input.program)
         throw new Error(`program require`)
-        
+
     if (!input.payload)
         throw new Error(`payload require`)
     else if (Object.entries(input.payload).length === 0)
@@ -41,7 +41,7 @@ export const postQueue = (
 
             const token = DeviceTokenDI()
             token.setAppId(data.target.appId)
-            
+
             if (data.target.deviceType)
             {
                 token.setDeviceType(data.target.deviceType)
@@ -68,6 +68,7 @@ export const postQueue = (
                     userIds: data.target.userIds,
                     deviceMatch: total,
                 },
+                options: data.options,
                 status: "P",
             })
 
@@ -78,7 +79,7 @@ export const postQueue = (
             })
 
             log.info(`start: ${hdr.getId()}`)
-            
+
             log.info(`totalPage: ${totalPage}`)
             let chunkOffsets = []
             for (let i = 0; i < totalPage; i++)
@@ -126,5 +127,5 @@ export const postQueue = (
         {
             setState('working_queue', false)
         }
-        
+
     }
