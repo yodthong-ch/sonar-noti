@@ -14,9 +14,7 @@ export type BeanstalkServerStaging = {
 export type MongoDBConfig = string
 
 export type MongoDBGroupConfig = {
-  [staging: string]: {
-    [db:string]: MongoDBConfig
-  }
+  [staging: string]: string
 }
 
 /** Type General */

@@ -9,26 +9,26 @@ import log from './libs/log'
 
 if (!key)
 {
-    log.error(`[ERROR] PRIVATE_KEY is unset`)
+    log.error(`[ERROR] APP_PRIVATE_KEY is unset`)
     process.exit(1)
 }
 
 if (limitToken < 1)
 {
-    log.error(`[ERROR] LIMIT_TOKEN must more than zero`)
+    log.error(`[ERROR] APP_LIMIT_TOKEN must more than zero`)
     process.exit(1)
 }
 
 if (limitUser < 1)
 {
-    log.error(`[ERROR] LIMIT_USER must more than zero`)
+    log.error(`[ERROR] APP_LIMIT_USER must more than zero`)
     process.exit(1)
 }
 
-log.info(`[INFO] LIMIT_TOKEN=${limitToken}`)
-log.info(`[INFO] LIMIT_USER=${limitUser}`)
-log.info(`[INFO] CLUSTERNAME=${clusterName}`)
-log.info(`[INFO] CLUSTERDISCOVERY=${clusterDiscovery}`)
+log.info(`[INFO] APP_LIMIT_TOKEN=${limitToken}`)
+log.info(`[INFO] APP_LIMIT_USER=${limitUser}`)
+log.info(`[INFO] APP_CLUSTERNAME=${clusterName}`)
+log.info(`[INFO] APP_CLUSTERDISCOVERY=${clusterDiscovery}`)
 
 
 const app = express(),
