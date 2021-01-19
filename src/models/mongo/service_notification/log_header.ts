@@ -26,6 +26,7 @@ const schema = new Mongoose.Schema(
         deviceMatch: Mongoose.Schema.Types.Number,
     },
     status: Mongoose.Schema.Types.String,
+    options: Mongoose.Schema.Types.Mixed,
   },
   schemaOptions
 )

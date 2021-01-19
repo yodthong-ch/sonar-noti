@@ -1,10 +1,11 @@
+import { PutOption } from "../connectors/QueueInterface";
 /** Type Config */
 
 export type BeanstalkServerConfig = {
     host: string,
     port: number,
   }
-  
+
 export type BeanstalkServerStaging = {
     [staging:string]: {
       [name:string]: BeanstalkServerConfig,
@@ -32,6 +33,7 @@ export type InputQueue = {
     program: string,
     target: InputQueueTarget,
     tags?: string[],
+    options?: PutOption
 }
 
 export type ChunkPacket = {
@@ -86,6 +88,7 @@ export type LogHeader = {
       userIds?: number[],
       deviceMatch: number,
   },
+  options?: PutOption,
   status: string,
 }
 
