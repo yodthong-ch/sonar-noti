@@ -1,22 +1,33 @@
 import {MongoDBGroupConfig} from '../items'
 
+type ConnectionInfo = {
+  host: string,
+  user?: string,
+  pass?: string,
+  replicaSet?: string,
+}
+
+const generateConnectionString = (connectionInfo: ConnectionInfo, database: string) => {
+  const { host, user, pass, replicaSet } = connectionInfo
+
+  const credential = user ? `${user}:${pass}@` : ''
+
+  return `mongodb://${credential}${host}/${database}?authSource=admin${
+    replicaSet ? `&replicaSet=${replicaSet}` : ''
+  }`
+}
+
+const serverConfig:ConnectionInfo = {
+  host: process.env.DEKD_MONGO_HOST || 'localhost',
+  user: process.env.DEKD_MONGO_USER,
+  pass: process.env.DEKD_MONGO_PASS,
+  replicaSet: process.env.DEKD_MONGO_REPLICA_SET,
+}
+
+
 const config:MongoDBGroupConfig = {
-  production: {
-    service_notification: 
-      'mongodb://mongo_dekd:yaitomyum@192.168.100.226,192.168.100.227,192.168.100.228/service_notification?replicaSet=rs2&authSource=admin',
-    service_user:
-      'mongodb://mongo_dekd:yaitomyum@192.168.100.226,192.168.100.227,192.168.100.228/service_user?replicaSet=rs2&authSource=admin',
-  },
-  development: {
-    service_notification:
-      'mongodb://mongo_dekd:yaitomyum@172.17.100.114,172.17.100.116,172.17.100.117/service_notification?replicaSet=dev-rs2&authSource=admin',
-    service_user:
-      'mongodb://mongo_dekd:yaitomyum@172.17.100.114,172.17.100.116,172.17.100.117/service_user?replicaSet=dev-rs2&authSource=admin',
-  },
-  local: {
-    service_notification: 'mongodb://mongodb/service_notification',
-    service_user: 'mongodb://mongodb/service_user',
-  },
+  service_notification: generateConnectionString(serverConfig, 'service_notification'),
+  service_user: generateConnectionString(serverConfig, 'service_user'),
 }
 
 export default config
