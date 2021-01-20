@@ -1,3 +1,5 @@
+import './env'
+
 import express from 'express'
 import PrivateAPI from './private'
 import PublicAPI from './public'
