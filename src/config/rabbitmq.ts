@@ -11,8 +11,6 @@ const config: amqplib.Options.Connect = {
     password: process.env.APP_RABBITMQ_PASSWORD,
 }
 
-console.log(config)
-
 const defaultOptions:{[x: string]: amqplib.Options.AssertExchange} = {
     exchangeOptions: {
       durable: true,

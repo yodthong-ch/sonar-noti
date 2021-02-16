@@ -41,7 +41,7 @@ RUN apk add --no-cache tini tzdata curl
 
 COPY package.json yarn.loc* /app/
 COPY --from=base /root/.npmrc /root/.npmrc
-COPY --from=base /app/dist /app/dist
+COPY --from=base /app/build /app/build
 
 RUN npm config set always-auth true \
     && yarn config set registry $YARN_REGISTRY \
