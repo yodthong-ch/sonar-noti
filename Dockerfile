@@ -37,7 +37,7 @@ ENV NODE_ENV=production \
 
 WORKDIR /app
 
-RUN apk add --no-cache tini tzdata
+RUN apk add --no-cache tini tzdata curl
 
 COPY package.json yarn.loc* /app/
 COPY --from=base /root/.npmrc /root/.npmrc
