@@ -10,6 +10,7 @@ export enum DeviceType {
 type AppIdSet = {
     [appid: string]: {
         name: string,
+        short: string,
         support: DeviceType[],
     }
 }
@@ -53,10 +54,12 @@ export const convertDeviceType2Text = (dt:DeviceType):string => {
 const appIds:AppIdSet = {
     "com.dekd.school": {
         name: "Dek-D School",
+        short: 'school',
         support: [DeviceType.FIREBASE_WEB],
     },
     "com.dekd.apps.admission": {
         name: "TCAS Dek-D",
+        short: 'tcasapp',
         support: [DeviceType.FIREBASE_ANDROID, DeviceType.FIREBASE_IOS],
     }
 }

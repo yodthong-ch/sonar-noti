@@ -1,11 +1,11 @@
 import {Request, Response} from 'express'
-import {InputDeviceLogFailed} from '../items'
+import {NotificationCentre} from '@dek-d/notification-core'
 import LogDeviceFailedInterface from '../repositories/interfaces/LogDeviceFailedInterface'
 import log from '../libs/log'
 
 export const postLogFailed = (LogDeviceFailedDI: ()=> LogDeviceFailedInterface) =>
     async (req: Request, res: Response) => {
-        const data = <InputDeviceLogFailed>req.body
+        const data = <NotificationCentre.InputDeviceLogFailed>req.body
 
         try
         {

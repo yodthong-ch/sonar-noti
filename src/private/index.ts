@@ -4,7 +4,7 @@ import DecodeMiddleware from '../middlewares/decode'
 import postChunk from './chunk'
 import DeviceToken from '../repositories/DeviceToken'
 import LogHeader from '../repositories/LogHeader'
-import {create as createBT} from '../connectors/beanstalkd'
+import createRabbitMQ from '../connectors/rabbitmq'
 import { postHealthCheck } from './health'
 
 export default (app:Express) => {
@@ -14,7 +14,7 @@ export default (app:Express) => {
     app.post('/chunk', decMiddle, postChunk(
         ()=>DeviceToken.make(),
         ()=> LogHeader.make(),
-        async (tube: string) => createBT(tube)
+        async () => await createRabbitMQ()
     ))
 
     app.post('/health', decMiddle, postHealthCheck())
