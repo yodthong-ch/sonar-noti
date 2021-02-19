@@ -34,11 +34,7 @@ export const services:NotificationCentre.ServiceGroup = {
         },
         queues: {
             firebase: {
-                name: 'notification.centre.firebase',
-                routingKeys: [
-                    'notification.centre.firebase.tcasapp',
-                    'notification.centre.firebase.school',
-                ]
+                name: 'notification.centre.firebase'
             }
         }
     }
