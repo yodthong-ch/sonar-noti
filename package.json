@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@babel/runtime-corejs2": "^7.9.2",
-    "@dek-d/notification-core": "^0.0.1",
+    "@dek-d/notification-core": "^0.0.2",
     "amqplib": "^0.6.0",
     "axios": "^0.19.2",
     "bluebird": "^3.7.2",

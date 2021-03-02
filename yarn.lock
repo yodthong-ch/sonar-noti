@@ -926,10 +926,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@dek-d/notification-core@^0.0.1":
-  version "0.0.1"
-  resolved "https://npm.ddoperation.com:9000/@dek-d%2fnotification-core/-/notification-core-0.0.1.tgz#f58f2acb852a57e7877b5a0606bbead4c1b590ff"
-  integrity sha512-UsusByhUeXgm/YcuzZ9YhoDbOXXX/Yu/z3uTTMDdsqFq+0S/pKShN06Erpzq2vTyfD0c7f6ctt3HNVBa9YcwJA==
+"@dek-d/notification-core@^0.0.2":
+  version "0.0.2"
+  resolved "https://npm.ddoperation.com:9000/@dek-d%2fnotification-core/-/notification-core-0.0.2.tgz#e4b6e1f3fc6b3d81b7b3861047f0358afccebedb"
+  integrity sha512-hlkB6U3VzsUEnnhA8h8Eip0gc66fY74J0Dd4d2YIssam86KY9mtTo2IV0jQ3OJDynqEj2yMQNzgUBQTW625s6Q==
   dependencies:
     amqplib "^0.6.0"
 

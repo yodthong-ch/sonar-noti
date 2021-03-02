@@ -72,22 +72,33 @@ export class RabbitMQChannel implements NotificationCentre.ChannelInterface {
         await this.channel.close()
     }
 
-    async publish(queueTarget: string, payload: Message.MessageQueue): Promise<NotificationCentre.PublishResponse> {
-        const response = await this.bulkPublish(queueTarget, [payload])
+    async publish(queueTarget: string, payload: Message.MessageQueue, options?: Message.InputQueueOptions): Promise<NotificationCentre.PublishResponse> {
+        const response = await this.bulkPublish(queueTarget, [payload], options)
         return response[0]
     }
 
-    async bulkPublish(queueTarget: string, payloads: Message.MessageQueue[]): Promise<NotificationCentre.PublishResponse[]> {
+    async bulkPublish(queueTarget: string, payloads: Message.MessageQueue[], options?: Message.InputQueueOptions): Promise<NotificationCentre.PublishResponse[]> {
         return Promise.all(payloads.map( async (payload) => {
             const result:NotificationCentre.PublishResponse = {status: false}
 
             try
             {
                 
+                const opts:amqplib.Options.Publish = {}
+                if (options)
+                {
+                    opts.headers = {}
+                    if (options.delay)
+                    {
+                        opts.headers['x-delay'] = options.delay * 1000
+                    }
+                }
+                
                 result.status = this.channel.publish(
                     this.service.exchange.name,
                     queueTarget,
-                    Buffer.from(JSON.stringify(payload))
+                    Buffer.from(JSON.stringify(payload)),
+                    opts
                 )
 
                 return result
