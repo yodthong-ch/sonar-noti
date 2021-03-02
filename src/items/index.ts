@@ -2,6 +2,17 @@
 import {Message} from '@dek-d/notification-core'
 /** Type Config */
 
+/**Deprecated */ 
+export type BeanstalkServerConfig = {
+  host: string,
+  port: number,
+}
+
+export type BeanstalkServerStaging = {
+    [name:string]: BeanstalkServerConfig,
+}
+/**End Deprecated */ 
+
 export type MongoDBConfig = string
 
 export type MongoDBGroupConfig = {

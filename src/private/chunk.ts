@@ -1,6 +1,6 @@
 import {Request, Response} from 'express'
 import DeviceTokenInterface from '../repositories/interfaces/DeviceTokenInterface'
-import { Token } from '../items'
+import { LogHeader, Token } from '../items'
 import { Message } from '@dek-d/notification-core'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 
@@ -10,13 +10,15 @@ import { setState } from '../libs/state'
 import log from '../libs/log'
 
 import _ from 'lodash'
+import QueueInterfaceLegacy from '../connectors/QueueInterface'
 
 type TokenSet = {[type: string]: Token[]}
 
 export const postChunk = (
     DeviceTokenDI:()=>DeviceTokenInterface,
     LogHeaderDI: ()=> LogHeaderInterface,
-    QueueDI: ()=>Promise<NotificationCentre.QueueInterface>
+    QueueDI: ()=>Promise<NotificationCentre.QueueInterface>,
+    LegacyQueueDI: ()=>Promise<QueueInterfaceLegacy>
 ) =>
     async (req: Request, res: Response):Promise<void> => {
         const data = <Message.ChunkPacket>req.body
@@ -35,9 +37,6 @@ export const postChunk = (
             }
 
             const device = DeviceTokenDI()
-            const rmq = await QueueDI()
-
-            const channel = await rmq.createChannel(services['notification'])
 
             device.setAppId(data.target.appId)
             if (data.target.deviceType) device.setDeviceType(data.target.deviceType)
@@ -67,6 +66,20 @@ export const postChunk = (
                 }
             }, {})
 
+            if (hdr.options && hdr.options.delay)
+            {
+                legacyNotification(
+                    LegacyQueueDI,
+                    hdr,
+                    payloadMain,
+                    groupDeviceType
+                )
+                return;
+            }
+
+            const rmq = await QueueDI()
+            const channel:NotificationCentre.ChannelInterface = await rmq.createChannel(services['notification'])
+
             for (const dtype of Object.keys(groupDeviceType))
             {
                 const targetRouting = mapQueueByDevice[dtype],
@@ -90,7 +103,6 @@ export const postChunk = (
                 
                 await channel.bulkPublish(routingKey, messages)
             }
-
             await channel.close()
         }
         catch (err)
@@ -107,4 +119,35 @@ export const postChunk = (
         }
     }
 
+const legacyNotification =  async (
+    LegacyQueueDI: ()=>Promise<QueueInterfaceLegacy>,
+    hdr: LogHeader,
+    payload: Message.MessageQueue,
+    tokensData: TokenSet
+) => {
+    const tube = await LegacyQueueDI()
+
+    for (const dtype of Object.keys(tokensData))
+    {
+        const tokens = _.chunk(tokensData[dtype], 200)
+
+        tokens.map( chunkTokens => {
+            const tokenMapUserIds = chunkTokens.reduce<{[token: string]: number}>( (carry, token) => {
+                return {
+                    ...carry,
+                    [token.token]: token.userId || 0,
+                }
+            }, {})
+
+            tube.put(encodeURIComponent(JSON.stringify({
+                ...payload,
+                tokens: tokenMapUserIds,
+            })), hdr.options)
+
+        })
+
+        
+    }
+
+}
 export default postChunk

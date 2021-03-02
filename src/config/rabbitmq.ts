@@ -36,7 +36,24 @@ export const services:NotificationCentre.ServiceGroup = {
             firebase: {
                 name: 'notification.centre.firebase'
             }
-        }
+        },
+    },
+    notificationDelay: {
+        exchange: {
+            name: 'notification.delay',
+            type: 'topic',
+            options: {
+                ...defaultOptions.exchangeOptions,
+                arguments: {
+                    'x-delayed-type': 'topic',
+                },
+            },
+        },
+        queues: {
+            firebase: {
+                name: 'notification.centre.firebase'
+            }
+        },
     }
 }
 
