@@ -26,13 +26,13 @@ const valid = (input: Message.InputQueue) => {
 }
 
 export const postQueue = (
-        DeviceTokenDI:()=>DeviceTokenInterface,
-        LogHeaderDI: ()=> LogHeaderInterface,
-        ClusterRequestDI: ()=>ClusterRequestFunc,
-        LIMIT_TOKEN:number,
-        LIMIT_PRIVATE_CONN:number
-    ) =>
-    async (req: Request, res: Response) => {
+    DeviceTokenDI:()=>DeviceTokenInterface,
+    LogHeaderDI: ()=> LogHeaderInterface,
+    ClusterRequestDI: ()=>ClusterRequestFunc,
+    LIMIT_TOKEN:number,
+    LIMIT_PRIVATE_CONN:number
+) =>
+    async (req: Request, res: Response):Promise<void> => {
         const data = <Message.InputQueue>req.body
         const clusterRequest = ClusterRequestDI()
 
@@ -82,7 +82,7 @@ export const postQueue = (
             log.info(`start: ${hdr.getId()}`)
 
             log.info(`totalPage: ${totalPage}`)
-            let chunkOffsets = []
+            const chunkOffsets = []
             for (let i = 0; i < totalPage; i++)
             {
                 chunkOffsets.push(i * LIMIT_TOKEN)

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { match, stub } from 'sinon'
+import { match } from 'sinon'
 import {mockRequest, mockResponse} from 'mock-req-res'
 import { MockDeviceToken, sampleData as sampleDataToken } from '../mock/DeviceToken'
 import { MockLogHeader } from '../mock/LogHeader'

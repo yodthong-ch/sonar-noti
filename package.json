@@ -11,8 +11,9 @@
     "prebuild": "yarn test",
     "build": "babel src --out-dir build --extensions \".ts\" --source-maps inline",
     "start": "node build/server.js",
-    "test": "tsc && mocha -r ts-node/register tests/**/*.test.ts",
-    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
+    "test": "yarn lint && tsc && mocha -r ts-node/register tests/**/*.test.ts",
+    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
+    "lint": "eslint . --ext .ts"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -34,8 +35,11 @@
     "@types/mock-req-res": "^1.1.2",
     "@types/mongoose": "^5.7.21",
     "@types/sinon": "^9.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
     "chai": "^4.2.0",
     "debug": "^4.1.1",
+    "eslint": "^7.21.0",
     "mocha": "^7.1.2",
     "mock-req-res": "^1.1.4",
     "nodemon": "^2.0.4",

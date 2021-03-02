@@ -1,6 +1,6 @@
 import {clusterName, privatePort, key} from '../config/app'
 
-import axios, {AxiosResponse} from 'axios'
+import axios from 'axios'
 import {AES} from '../helpers/crypt'
 
 type ClusterRequestOptions = {

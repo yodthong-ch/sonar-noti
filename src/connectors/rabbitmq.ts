@@ -114,7 +114,7 @@ export class RabbitMQChannel implements NotificationCentre.ChannelInterface {
 }
 
 export class RabbitMQConnection implements NotificationCentre.QueueInterface {
-    private ready: boolean = false
+    private ready = false
     private conn:amqplib.Connection | undefined
     private connectionInfo:amqplib.Options.Connect
 
@@ -150,7 +150,7 @@ export class RabbitMQConnection implements NotificationCentre.QueueInterface {
     }
 }
 
-export default async () => {
+export default async ():Promise<RabbitMQConnection> => {
     if (!connections)
     {
         const conn = new RabbitMQConnection(config)  

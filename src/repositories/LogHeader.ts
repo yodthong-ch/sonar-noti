@@ -31,7 +31,7 @@ class LogHeader implements LogHeaderInterface {
         return createHdr._id
     }
 
-    valid() {
+    valid():void {
         if (!this._id) throw new Error(`no set id`)
     }
 

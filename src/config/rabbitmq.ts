@@ -13,12 +13,12 @@ const config: amqplib.Options.Connect = {
 
 const defaultOptions:{[x: string]: amqplib.Options.AssertExchange} = {
     exchangeOptions: {
-      durable: true,
+        durable: true,
     },
     queueOptions: {
-      durable: true,
+        durable: true,
     },
-  }
+}
 
 export const vhostMap:{[vhost: string]: string} = {
     notification: '/notification',

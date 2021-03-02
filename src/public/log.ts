@@ -4,7 +4,7 @@ import LogDeviceFailedInterface from '../repositories/interfaces/LogDeviceFailed
 import log from '../libs/log'
 
 export const postLogFailed = (LogDeviceFailedDI: ()=> LogDeviceFailedInterface) =>
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response):Promise<void> => {
         const data = <NotificationCentre.InputDeviceLogFailed>req.body
 
         try

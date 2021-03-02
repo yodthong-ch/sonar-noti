@@ -7,7 +7,7 @@ import LogHeader from '../repositories/LogHeader'
 import createRabbitMQ from '../connectors/rabbitmq'
 import { postHealthCheck } from './health'
 
-export default (app:Express) => {
+export default (app:Express):void => {
     
     const decMiddle = DecodeMiddleware(key!)
 

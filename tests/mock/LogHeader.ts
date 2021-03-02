@@ -22,8 +22,8 @@ const sampleData: LogHeaderItem[] = [
     }
 ]
 
-var mockObjectID = () => {
-    var timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+const mockObjectID = () => {
+    const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
     return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
         return (Math.random() * 16 | 0).toString(16);
     }).toLowerCase();
@@ -53,7 +53,7 @@ export class MockLogHeader implements LogHeaderInterface {
         return mockId
     }
 
-    valid() {
+    valid():void {
         if (!this._id) throw new Error(`no set id`)
     }
 

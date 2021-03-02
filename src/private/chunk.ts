@@ -4,7 +4,6 @@ import { Token } from '../items'
 import { Message } from '@dek-d/notification-core'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 
-import { DeviceType } from '../config/appid'
 import {mapQueueByDevice, services} from '../config/rabbitmq'
 import {NotificationCentre} from '@dek-d/notification-core'
 import { setState } from '../libs/state'
@@ -19,9 +18,9 @@ export const postChunk = (
     LogHeaderDI: ()=> LogHeaderInterface,
     QueueDI: ()=>Promise<NotificationCentre.QueueInterface>
 ) =>
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response):Promise<void> => {
         const data = <Message.ChunkPacket>req.body
-        let isSend:boolean = false
+        let isSend = false
 
         try
         {
