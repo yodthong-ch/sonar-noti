@@ -1,13 +1,14 @@
 import {Request, Response} from 'express'
 import DeviceTokenInterface from '../repositories/interfaces/DeviceTokenInterface'
-import {InputQueue, ChunkPacket} from '../items'
+// import {InputQueue, ChunkPacket} from '../items'
+import {Message} from '@dek-d/notification-core'
 import { ClusterRequestFunc } from '../services/Request'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 import appIds from '../config/appid'
 import { setState } from '../libs/state'
 import log from '../libs/log'
 
-const valid = (input: InputQueue) => {
+const valid = (input: Message.InputQueue) => {
     if (!input)
         throw new Error(`input require`)
     if (!input.program)
@@ -25,14 +26,14 @@ const valid = (input: InputQueue) => {
 }
 
 export const postQueue = (
-        DeviceTokenDI:()=>DeviceTokenInterface,
-        LogHeaderDI: ()=> LogHeaderInterface,
-        ClusterRequestDI: ()=>ClusterRequestFunc,
-        LIMIT_TOKEN:number,
-        LIMIT_PRIVATE_CONN:number
-    ) =>
-    async (req: Request, res: Response) => {
-        const data = <InputQueue>req.body
+    DeviceTokenDI:()=>DeviceTokenInterface,
+    LogHeaderDI: ()=> LogHeaderInterface,
+    ClusterRequestDI: ()=>ClusterRequestFunc,
+    LIMIT_TOKEN:number,
+    LIMIT_PRIVATE_CONN:number
+) =>
+    async (req: Request, res: Response):Promise<void> => {
+        const data = <Message.InputQueue>req.body
         const clusterRequest = ClusterRequestDI()
 
         try {
@@ -81,7 +82,7 @@ export const postQueue = (
             log.info(`start: ${hdr.getId()}`)
 
             log.info(`totalPage: ${totalPage}`)
-            let chunkOffsets = []
+            const chunkOffsets = []
             for (let i = 0; i < totalPage; i++)
             {
                 chunkOffsets.push(i * LIMIT_TOKEN)
@@ -94,7 +95,7 @@ export const postQueue = (
                 log.info(`run chunk -> ${chunked.toString()}`, {chunked})
                 await Promise.all(chunked.map( async c => {
 
-                    const newChunk:ChunkPacket = {
+                    const newChunk:Message.ChunkPacket = {
                         headerId: hdr.getId(),
                         target: data.target,
                         offset: c,

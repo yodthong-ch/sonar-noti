@@ -4,17 +4,19 @@ import DecodeMiddleware from '../middlewares/decode'
 import postChunk from './chunk'
 import DeviceToken from '../repositories/DeviceToken'
 import LogHeader from '../repositories/LogHeader'
-import {create as createBT} from '../connectors/beanstalkd'
+import createRabbitMQ from '../connectors/rabbitmq'
+import LegacyQueue from '../connectors/beanstalk'
 import { postHealthCheck } from './health'
 
-export default (app:Express) => {
+export default (app:Express):void => {
     
     const decMiddle = DecodeMiddleware(key!)
 
     app.post('/chunk', decMiddle, postChunk(
         ()=>DeviceToken.make(),
         ()=> LogHeader.make(),
-        async (tube: string) => createBT(tube)
+        async () => await createRabbitMQ(),
+        async () => await LegacyQueue('LegacyNotification')
     ))
 
     app.post('/health', decMiddle, postHealthCheck())

@@ -7,7 +7,7 @@ import {getState} from '../libs/state'
 import log from '../libs/log'
 
 export const getReadienessCheck = () => 
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response):Promise<void> => {
         const ok = getState('stillAlive') === true ||
             getState('working_queue') === true ||
             getState('working_priv_chunk') === true
@@ -15,7 +15,7 @@ export const getReadienessCheck = () =>
     }
 
 export const getHealthCheck = (clusterName: string, clusterDiscovery: string, ClusterRequestDI:()=>ClusterRequestFunc) =>
-    async (req: Request, res: Response) => {
+    async (req: Request, res: Response):Promise<void> => {
         const clusterRequest = ClusterRequestDI()
         try
         {

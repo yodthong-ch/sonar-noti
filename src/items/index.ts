@@ -1,16 +1,17 @@
-import { PutOption } from "../connectors/QueueInterface";
+// import { PutOption } from "../connectors/QueueInterface";
+import {Message} from '@dek-d/notification-core'
 /** Type Config */
 
+/**Deprecated */ 
 export type BeanstalkServerConfig = {
-    host: string,
-    port: number,
-  }
+  host: string,
+  port: number,
+}
 
 export type BeanstalkServerStaging = {
-    [staging:string]: {
-      [name:string]: BeanstalkServerConfig,
-    }
-  }
+    [name:string]: BeanstalkServerConfig,
+}
+/**End Deprecated */ 
 
 export type MongoDBConfig = string
 
@@ -19,39 +20,6 @@ export type MongoDBGroupConfig = {
 }
 
 /** Type General */
-
-export type InputQueueTarget = {
-    appId: string,
-    userIds?: number[],
-    deviceType?: string,
-}
-
-export type InputQueuePayload = {[x:string]: any}
-
-export type InputQueue = {
-    payload: InputQueuePayload,
-    program: string,
-    target: InputQueueTarget,
-    tags?: string[],
-    options?: PutOption
-}
-
-export type ChunkPacket = {
-    headerId: string,
-    target: InputQueueTarget,
-    offset: number,
-    limit: number,
-}
-
-export type InputDeviceLogFailed = {
-    headerId: string,
-    program: string,
-    appId: string,
-    deviceToken: string,
-    userId: number,
-    chunk: number,
-    error: string,
-}
 
 export type InputRegisterToken = {
     appId: string,
@@ -88,16 +56,7 @@ export type LogHeader = {
       userIds?: number[],
       deviceMatch: number,
   },
-  options?: PutOption,
+  options?: Message.InputQueueOptions,
   status: string,
 }
 
-export type InputLogDeviceFailed = {
-  headerId: string,
-  program: string,
-  appId: string,
-  chunk: number,
-  userId: number,
-  deviceToken: string,
-  error?: string,
-}

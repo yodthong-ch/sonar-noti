@@ -6,13 +6,14 @@
   "license": "Proprietary",
   "private": true,
   "scripts": {
-    "dev": "PRIVATE_KEY=test123456 APP_ENV=development nodemon --signal SIGTERM --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "dev": "APP_ENV=development NODE_ENV=development nodemon --signal SIGTERM --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
     "check": "tsc --noEmit",
     "prebuild": "yarn test",
     "build": "babel src --out-dir build --extensions \".ts\" --source-maps inline",
     "start": "node build/server.js",
-    "test": "tsc && mocha -r ts-node/register tests/**/*.test.ts",
-    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
+    "test": "yarn lint && tsc && mocha -r ts-node/register tests/**/*.test.ts",
+    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
+    "lint": "eslint . --ext .ts"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -23,6 +24,7 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-typescript": "^7.9.0",
     "@babel/runtime": "^7.9.2",
+    "@types/amqplib": "^0.5.17",
     "@types/bluebird": "^3.5.32",
     "@types/chai": "^4.2.11",
     "@types/debug": "^4.1.5",
@@ -33,8 +35,11 @@
     "@types/mock-req-res": "^1.1.2",
     "@types/mongoose": "^5.7.21",
     "@types/sinon": "^9.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
     "chai": "^4.2.0",
     "debug": "^4.1.1",
+    "eslint": "^7.21.0",
     "mocha": "^7.1.2",
     "mock-req-res": "^1.1.4",
     "nodemon": "^2.0.4",
@@ -45,6 +50,8 @@
   },
   "dependencies": {
     "@babel/runtime-corejs2": "^7.9.2",
+    "@dek-d/notification-core": "^0.0.2",
+    "amqplib": "^0.6.0",
     "axios": "^0.19.2",
     "bluebird": "^3.7.2",
     "dotenv-flow": "^3.2.0",

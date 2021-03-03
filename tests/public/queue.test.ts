@@ -1,15 +1,15 @@
 import { expect } from 'chai'
-import { match, stub } from 'sinon'
+import { match } from 'sinon'
 import {mockRequest, mockResponse} from 'mock-req-res'
 import { MockDeviceToken, sampleData as sampleDataToken } from '../mock/DeviceToken'
 import { MockLogHeader } from '../mock/LogHeader'
-import { InputQueue } from '../../src/items'
+import { Message } from '@dek-d/notification-core'
 import { postQueue } from '../../src/public/queue'
 import { ClusterRequestFunc } from '../../src/services/Request'
 
 describe('endpoint - public queue', () => {
     it('queue messaging', async () => {
-        const payload:InputQueue = {
+        const payload:Message.InputQueue = {
             program: "testing",
             payload: {
                 data: {

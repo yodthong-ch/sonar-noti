@@ -8,7 +8,7 @@ import { postRegisterToken } from './register'
 import { clusterName, clusterDiscovery, limitToken, limitPrivateConn } from '../config/app'
 import { getHealthCheck, getReadienessCheck } from './health'
 import { clusterRequest } from '../services/Request'
-export default (app:Express) => {
+export default (app:Express):void => {
 
     app.post('/register', postRegisterToken(() => DeviceToken.make()))
     app.post('/queue', postQueue(

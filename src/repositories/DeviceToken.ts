@@ -13,29 +13,29 @@ type FilterType = {
 
 class DeviceToken implements DeviceTokenInterface {
     private filter:FilterType = {}
-    static make() {
+    static make():DeviceToken {
         return new DeviceToken()
     }
 
-    public setAppId(value: string)
+    public setAppId(value: string):DeviceToken
     {
         this.filter.appId = value
         return this
     }
 
-    public setDeviceType(value: string)
+    public setDeviceType(value: string):DeviceToken
     {
         this.filter.deviceType = value
         return this
     }
 
-    public setUserIds(userIds: number[])
+    public setUserIds(userIds: number[]):DeviceToken
     {
         this.filter.userIds = userIds
         return this
     }
 
-    public clearUserIds()
+    public clearUserIds():DeviceToken
     {
         this.filter.userIds = undefined
         return this

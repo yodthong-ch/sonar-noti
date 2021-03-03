@@ -8,18 +8,18 @@ const reservedKey = ['shutdown']
 const event = new EventEmitter()
 export const EVENT_SHUTDOWN = Symbol("Shutdown")
 
-export const bind = (evt_name: symbol, listener: ()=>void) => {
+export const bind = (evt_name: symbol, listener: ()=>void):void => {
     event.on(evt_name, listener)
 }
 
-export const setState = (key:string, value:any) => {
+export const setState = (key:string, value:any):boolean => {
     if (reservedKey.indexOf(key) >= 0) return false
     state.set(key, value)
 
     return true
 }
 
-export const getState = (key:string, default_value?:any) => {
+export const getState = (key:string, default_value?:any):any => {
     return state.get(key) || default_value
 }
 

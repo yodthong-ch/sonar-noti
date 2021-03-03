@@ -1,19 +1,29 @@
 import {Request, Response} from 'express'
 import DeviceTokenInterface from '../repositories/interfaces/DeviceTokenInterface'
-import { ChunkPacket, Token } from '../items'
+import { LogHeader, Token } from '../items'
+import { Message } from '@dek-d/notification-core'
 import LogHeaderInterface from '../repositories/interfaces/LogHeaderInterface'
 
-import { DeviceType } from '../config/appid'
-import QueueInterface from '../connectors/QueueInterface'
+import {mapQueueByDevice, services} from '../config/rabbitmq'
+import {NotificationCentre} from '@dek-d/notification-core'
 import { setState } from '../libs/state'
 import log from '../libs/log'
 
+import _ from 'lodash'
+import QueueInterfaceLegacy from '../connectors/QueueInterface'
+
 type TokenSet = {[type: string]: Token[]}
 
-export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: ()=> LogHeaderInterface, QueueDI: (tube:string)=>Promise<QueueInterface>) =>
-    async (req: Request, res: Response) => {
-        const data = <ChunkPacket>req.body
-        let isSend:boolean = false
+export const postChunk = (
+    DeviceTokenDI:()=>DeviceTokenInterface,
+    LogHeaderDI: ()=> LogHeaderInterface,
+    QueueDI: ()=>Promise<NotificationCentre.QueueInterface>,
+    LegacyQueueDI: ()=>Promise<QueueInterfaceLegacy>
+) =>
+    async (req: Request, res: Response):Promise<void> => {
+        const data = <Message.ChunkPacket>req.body
+        let isSend = false
+
         try
         {
             setState('working_priv_chunk', true)
@@ -27,6 +37,7 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
             }
 
             const device = DeviceTokenDI()
+
             device.setAppId(data.target.appId)
             if (data.target.deviceType) device.setDeviceType(data.target.deviceType)
             if (data.target.userIds) device.setUserIds(data.target.userIds)
@@ -35,12 +46,13 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
             res.send({token: tokens.length})
             isSend = true
 
-            const payloadMain:{[key: string]: any} = {
+            const payloadMain:Message.MessageQueue = {
                 appId: data.target.appId,
                 program: hdr.program,
-                headerId: hdr._id,
+                headerId: hdr._id!,
                 chunk: data.offset,
                 payload: hdr.payload,
+                tokens: {},
             }
 
             const groupDeviceType = tokens.reduce<TokenSet>((carry, item) => {
@@ -54,54 +66,44 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
                 }
             }, {})
 
-            for (const dtype of Object.keys(groupDeviceType))
+            if (hdr.options && hdr.options.delay)
             {
-                let offsetBT = 0
-                const tokens = groupDeviceType[dtype],
-                      totalToken = tokens.length
-
-                while (offsetBT < totalToken)
-                {
-                    const sliceToken = tokens.slice(offsetBT, offsetBT + 200)
-                    const tokenMapUserId = sliceToken.reduce<{[token: string]: number}>( (carry, token) => {
-                        return {...carry, [token.token]: token.userId || 0}
-                    }, {})
-
-                    if (dtype.indexOf(DeviceType.FIREBASE) >= 0)
-                    {
-                        const bt = await QueueDI('FIREBASE_API')
-                        const payloadWithToken = {
-                            ...payloadMain,
-                            tokens: tokenMapUserId,
-                        }
-                        bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)), hdr.options)
-                    }
-
-                    offsetBT += sliceToken.length
-                }
+                legacyNotification(
+                    LegacyQueueDI,
+                    hdr,
+                    payloadMain,
+                    groupDeviceType
+                )
+                return;
             }
 
-            /*let ccnt = 0
-            const limitChunkToken = 100
-            while (ccnt < tokens.length)
-            {
-                const chunked = tokens.slice(ccnt, ccnt + limitChunkToken)
-                for (const item of chunked)
-                {
-                    if (item.deviceType.indexOf(DeviceType.FIREBASE) >= 0)
-                    {
-                        const bt = await QueueDI('FIREBASE_API')
-                        const payloadWithToken = {
-                            ...payloadMain,
-                            userId: item.userId || 0,
-                            token: item.token,
-                        }
-                        bt.put(encodeURIComponent(JSON.stringify(payloadWithToken)))
-                    }
-                }
+            const rmq = await QueueDI()
+            const channel:NotificationCentre.ChannelInterface = await rmq.createChannel(services['notification'])
 
-                ccnt += chunked.length
-            }*/
+            for (const dtype of Object.keys(groupDeviceType))
+            {
+                const targetRouting = mapQueueByDevice[dtype],
+                    routingKey = [targetRouting, hdr.program].join('.')
+
+                const tokens = _.chunk(groupDeviceType[dtype], 200)
+
+                const messages = tokens.map<Message.MessageQueue>( chunkTokens => {
+                    const tokenMapUserIds = chunkTokens.reduce<{[token: string]: number}>( (carry, token) => {
+                        return {
+                            ...carry,
+                            [token.token]: token.userId || 0,
+                        }
+                    }, {})
+
+                    return {
+                        ...payloadMain,
+                        tokens: tokenMapUserIds,
+                    }
+                })
+                
+                await channel.bulkPublish(routingKey, messages)
+            }
+            await channel.close()
         }
         catch (err)
         {
@@ -117,4 +119,35 @@ export const postChunk = (DeviceTokenDI:()=>DeviceTokenInterface, LogHeaderDI: (
         }
     }
 
+const legacyNotification =  async (
+    LegacyQueueDI: ()=>Promise<QueueInterfaceLegacy>,
+    hdr: LogHeader,
+    payload: Message.MessageQueue,
+    tokensData: TokenSet
+) => {
+    const tube = await LegacyQueueDI()
+
+    for (const dtype of Object.keys(tokensData))
+    {
+        const tokens = _.chunk(tokensData[dtype], 200)
+
+        tokens.map( chunkTokens => {
+            const tokenMapUserIds = chunkTokens.reduce<{[token: string]: number}>( (carry, token) => {
+                return {
+                    ...carry,
+                    [token.token]: token.userId || 0,
+                }
+            }, {})
+
+            tube.put(encodeURIComponent(JSON.stringify({
+                ...payload,
+                tokens: tokenMapUserIds,
+            })), hdr.options)
+
+        })
+
+        
+    }
+
+}
 export default postChunk

@@ -1,6 +1,5 @@
 import config from '../config/mongodb'
 import bluebird from 'bluebird'
-import _ from 'lodash'
 import mongoose from 'mongoose'
 
 export const connections:{[service: string]: mongoose.Connection} = {}
@@ -14,39 +13,41 @@ mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
 mongoose.set('useNewUrlParser', true)
 
-export const create = (service:string) => {
-  let connection = connections[service]
+export const create = (service:string):mongoose.Connection => {
+    let connection = connections[service]
 
-  if (!connection) {
-    const server = config[service]
+    if (!connection) {
+        const server = config[service]
 
-    connection = mongoose.createConnection(server, { poolSize: 30 })
+        connection = mongoose.createConnection(server, { poolSize: 30 })
 
-    connection.on('error', err => {
-      if (err.message && /failed to connect to server .* on first connect/.test(err.message)) {
-        console.log(new Date(), String(err))
+        connection.on('error', err => {
+            if (err.message && /failed to connect to server .* on first connect/.test(err.message)) {
+                console.log(new Date(), String(err))
 
-        // Wait for a bit, then try to connect again
-        setTimeout(() => {
-          console.log(`> Mongoose: Retrying to connect to "${service}"...`)
-          connection.openUri(server).catch(() => {})
+                // Wait for a bit, then try to connect again
+                setTimeout(() => {
+                    console.log(`> Mongoose: Retrying to connect to "${service}"...`)
+                    connection.openUri(server).catch(() => {
+                        // do nothing
+                    })
 
-          // delay 5 seconds before retry
-        }, 5 * 1000)
-      } else {
-        // Some other error occurred.  Log it.
-        console.error(`> Mongoose:(${new Date()}): ${String(err)}`)
-      }
-    })
+                    // delay 5 seconds before retry
+                }, 5 * 1000)
+            } else {
+                // Some other error occurred.  Log it.
+                console.error(`> Mongoose:(${new Date()}): ${String(err)}`)
+            }
+        })
 
-    connection.once('open', () => {
-      console.log(`> Mongoose: Connection established to "${service}".`)
-    })
+        connection.once('open', () => {
+            console.log(`> Mongoose: Connection established to "${service}".`)
+        })
 
-    connections[service] = connection
-  }
+        connections[service] = connection
+    }
 
-  return connection
+    return connection
 }
 
 /**
@@ -65,8 +66,8 @@ type MongoDBConnect<T> = {
 }
 
 export const connect = <T>({ service, collection, schema }:MongoDBConnect<T>) => {
-  const connection = create(service)
-  return connection.model(collection, schema, collection)
+    const connection = create(service)
+    return connection.model(collection, schema, collection)
 }
 
 export const NOTIFICATION_SERVICE = 'service_notification'

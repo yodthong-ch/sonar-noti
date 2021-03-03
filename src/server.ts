@@ -61,18 +61,18 @@ HCBind(EVENT_SHUTDOWN, async()=>{
     log.info("shutting down")
   
     const recheckWorkingState = () => {
-      log.warn("check working....")
+        log.warn("check working....")
   
-      if (getState('working') !== true)
-      {
-        log.warn("no working exiting")
-        process.exit(0)
-      }
-      else
-      {
-        log.warn("still working attempt check....")
-        setTimeout(recheckWorkingState, 5000) 
-      }
+        if (getState('working') !== true)
+        {
+            log.warn("no working exiting")
+            process.exit(0)
+        }
+        else
+        {
+            log.warn("still working attempt check....")
+            setTimeout(recheckWorkingState, 5000) 
+        }
     }
   
     recheckWorkingState()

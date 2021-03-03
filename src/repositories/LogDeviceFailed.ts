@@ -1,7 +1,7 @@
 import LogDeviceFailedInterface from './interfaces/LogDeviceFailedInterface'
 import DeviceFailedModel from '../models/mongo/service_notification/log_device_failed'
-import {InputLogDeviceFailed} from '../items'
 import appIds from '../config/appid'
+import { NotificationCentre } from '@dek-d/notification-core'
 
 class LogDeviceFailedRepository implements LogDeviceFailedInterface {
     static make(): LogDeviceFailedInterface
@@ -9,7 +9,7 @@ class LogDeviceFailedRepository implements LogDeviceFailedInterface {
         return new LogDeviceFailedRepository()
     }
 
-    private valid(input: InputLogDeviceFailed)
+    private valid(input: NotificationCentre.InputDeviceLogFailed)
     {
         if (!input.headerId)
         {
@@ -35,7 +35,7 @@ class LogDeviceFailedRepository implements LogDeviceFailedInterface {
             throw new Error(`token required`)
         }
     }
-    async save(input: InputLogDeviceFailed): Promise<string> {
+    async save(input: NotificationCentre.InputDeviceLogFailed): Promise<string> {
         this.valid(input)
 
         const result = await DeviceFailedModel.create({
