@@ -7,8 +7,6 @@ export const servers:BeanstalkServerStaging = {
     },
 }
 
-console.log("bt-config", servers)
-
 export const aliases:{[name: string]: string} = {
     default: 'default',
 }

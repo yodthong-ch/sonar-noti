@@ -15,7 +15,6 @@ const connect = async (server = 'default'):Promise<JackdClient> => {
 
     const connection = new JackdClient()
     
-    console.log("bt-options", options)
     await connection.connect({
         host: options.host,
         port: options.port,
