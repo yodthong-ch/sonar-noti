@@ -56,7 +56,6 @@
     "bluebird": "^3.7.2",
     "dotenv-flow": "^3.2.0",
     "express": "^4.17.1",
-    "jackd": "^1.2.4",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "mongoose": "^5.9.15",
