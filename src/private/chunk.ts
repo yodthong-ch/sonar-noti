@@ -10,15 +10,13 @@ import { setState } from '../libs/state'
 import log from '../libs/log'
 
 import _ from 'lodash'
-import QueueInterfaceLegacy from '../connectors/QueueInterface'
 
 type TokenSet = {[type: string]: Token[]}
 
 export const postChunk = (
     DeviceTokenDI:()=>DeviceTokenInterface,
     LogHeaderDI: ()=> LogHeaderInterface,
-    QueueDI: ()=>Promise<NotificationCentre.QueueInterface>,
-    LegacyQueueDI: ()=>Promise<QueueInterfaceLegacy>
+    QueueDI: ()=>Promise<NotificationCentre.QueueInterface>
 ) =>
     async (req: Request, res: Response):Promise<void> => {
         const data = <Message.ChunkPacket>req.body
@@ -66,17 +64,6 @@ export const postChunk = (
                 }
             }, {})
 
-            if (hdr.options && hdr.options.delay)
-            {
-                legacyNotification(
-                    LegacyQueueDI,
-                    hdr,
-                    payloadMain,
-                    groupDeviceType
-                )
-                return;
-            }
-
             const rmq = await QueueDI()
             const channel:NotificationCentre.ChannelInterface = await rmq.createChannel(services['notification'])
 
@@ -118,36 +105,4 @@ export const postChunk = (
             setState('working_priv_chunk', false)
         }
     }
-
-const legacyNotification =  async (
-    LegacyQueueDI: ()=>Promise<QueueInterfaceLegacy>,
-    hdr: LogHeader,
-    payload: Message.MessageQueue,
-    tokensData: TokenSet
-) => {
-    const tube = await LegacyQueueDI()
-
-    for (const dtype of Object.keys(tokensData))
-    {
-        const tokens = _.chunk(tokensData[dtype], 200)
-
-        tokens.map( chunkTokens => {
-            const tokenMapUserIds = chunkTokens.reduce<{[token: string]: number}>( (carry, token) => {
-                return {
-                    ...carry,
-                    [token.token]: token.userId || 0,
-                }
-            }, {})
-
-            tube.put(encodeURIComponent(JSON.stringify({
-                ...payload,
-                tokens: tokenMapUserIds,
-            })), hdr.options)
-
-        })
-
-        
-    }
-
-}
 export default postChunk

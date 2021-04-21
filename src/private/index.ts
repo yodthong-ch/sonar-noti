@@ -5,7 +5,6 @@ import postChunk from './chunk'
 import DeviceToken from '../repositories/DeviceToken'
 import LogHeader from '../repositories/LogHeader'
 import createRabbitMQ from '../connectors/rabbitmq'
-import LegacyQueue from '../connectors/beanstalk'
 import { postHealthCheck } from './health'
 
 export default (app:Express):void => {
@@ -15,8 +14,7 @@ export default (app:Express):void => {
     app.post('/chunk', decMiddle, postChunk(
         ()=>DeviceToken.make(),
         ()=> LogHeader.make(),
-        async () => await createRabbitMQ(),
-        async () => await LegacyQueue('LegacyNotification')
+        async () => await createRabbitMQ()
     ))
 
     app.post('/health', decMiddle, postHealthCheck())
