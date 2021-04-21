@@ -7,8 +7,8 @@ const config: amqplib.Options.Connect = {
     hostname: process.env.DEKD_RABBITMQ_HOST || 'localhost',
     port: parseInt(process.env.DEKD_RABBITMQ_PORT || '5672'),
     vhost: process.env.APP_RABBITMQ_VHOST || '/default',
-    username: process.env.APP_RABBITMQ_USERNAME,
-    password: process.env.APP_RABBITMQ_PASSWORD,
+    username: process.env.APP_RABBITMQ_USERNAME_CORE,
+    password: process.env.APP_RABBITMQ_PASSWORD_CORE,
 }
 
 const defaultOptions:{[x: string]: amqplib.Options.AssertExchange} = {
