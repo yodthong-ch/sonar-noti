@@ -64,5 +64,4 @@ export const mapQueueByDevice:{[x:string]: string} = {
     [DeviceType.FIREBASE_WEB]: 'notification.centre.firebase',
 }
 
-console.log("CONFIG", config)
 export default config
