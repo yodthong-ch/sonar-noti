@@ -73,11 +73,7 @@ export const postQueue = (
                 status: "P",
             })
 
-            log.info('Result Log', {
-                ack: true,
-                total,
-                id: hdrId,
-            })
+            log.info('Result Log', hdrId)
 
             res.status(200).send({
                 ack: true,
